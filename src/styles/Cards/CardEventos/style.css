@@ -48,6 +48,15 @@
     align-self: center;
 }
 
+.opcoes-modificar-evento{
+    display: flex;
+    gap: 20px;
+    font-size: 1.5rem;
+    width: 100%;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
 @media (max-width: 768px) {
     .cardEventos-container {
         width: 100%;

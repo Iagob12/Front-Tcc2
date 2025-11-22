@@ -23,6 +23,7 @@ const AdicionarAtividade = () => {
     const [imageFile, setImageFile] = useState(null);
     const [showCropModal, setShowCropModal] = useState(false);
     const [imageToCrop, setImageToCrop] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (isEdit) {
@@ -64,12 +65,9 @@ const AdicionarAtividade = () => {
             return;
         }
 
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImageToCrop(reader.result);
-            setShowCropModal(true);
-        };
-        reader.readAsDataURL(file);
+        const imageUrl = URL.createObjectURL(file);
+        setImageToCrop(imageUrl);
+        setShowCropModal(true);
     };
 
     const handleCropComplete = (croppedImage) => {
@@ -95,16 +93,38 @@ const AdicionarAtividade = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const dto = {
-            titulo: formData.nome,
-            descricao: formData.descricao,
-            dias: formData.data,
-            horario: formData.hora,
-            vagas: Number(formData.vagas),
-            imagem: imagePreview || null,
-        };
+        if (loading) return;
+
+        setLoading(true);
 
         try {
+            let imagemBase64 = null;
+
+            if (imagePreview) {
+                if (imagePreview.startsWith('data:image')) {
+                    imagemBase64 = imagePreview;
+                } else {
+                    const response = await fetch(imagePreview);
+                    const blob = await response.blob();
+                    
+                    imagemBase64 = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(blob);
+                    });
+                }
+            }
+
+            const dto = {
+                titulo: formData.nome,
+                descricao: formData.descricao,
+                dias: formData.data,
+                horario: formData.hora,
+                vagas: Number(formData.vagas),
+                imagem: imagemBase64,
+            };
+
             let response;
             if (isEdit) {
                 response = await apiPut(`/curso/atualizar/${id}`, dto);
@@ -122,6 +142,8 @@ const AdicionarAtividade = () => {
         } catch (error) {
             alert("Erro ao conectar com a API. Tente novamente.");
             console.error(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -202,7 +224,11 @@ const AdicionarAtividade = () => {
                         style={{ display: "none" }}
                     />
 
-                    <Button className="button" text={"Salvar"} />
+                    <Button 
+                        className="button" 
+                        text={loading ? "Salvando..." : "Salvar"}
+                        disabled={loading}
+                    />
                 </form>
             </div>
 

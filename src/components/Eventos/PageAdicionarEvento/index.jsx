@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../../styles/Eventos/adicionar-evento/style.css";
 import Button from "../../Button";
 import IconUpload from "../../../assets/Blog/upload.svg";
-import { apiPost } from "../../../config/api";
-import { useNavigate } from "react-router-dom";
+import { apiPost, apiPut, apiGet } from "../../../config/api";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AdicionarEvento = () => {
   const navigate = useNavigate();
-
+  const { id } = useParams();
+  
   const [nome, setNome] = useState("");
   const [data, setData] = useState("");
   const [hora, setHora] = useState("");
@@ -19,6 +20,34 @@ const AdicionarEvento = () => {
   const [imagem, setImagem] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const fetchEvento = async (id) => {
+    try {
+      const response = await apiGet(`/evento/${id}`);
+      if (response.ok) {
+        const evento = await response.json();
+
+        setNome(evento.nome);
+        setData(evento.data.split("T")[0]);
+        setDescricao(evento.descricao);
+        
+        const [estadoLocal, cidadeEndereco] = evento.local.split(" - ");
+        const [cidade, enderecoRegiao] = cidadeEndereco.split(", ");
+        const [endereco, regiao] = enderecoRegiao.split(", ");
+
+        setEstado(estadoLocal);
+        setCidade(cidade);
+        setEndereco(endereco);
+        setRegiao(regiao);
+        
+        setImagem(evento.imagem || "default-image.png");
+      } else {
+        console.error("Erro ao carregar evento:", response.status);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar evento:", error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -28,19 +57,24 @@ const AdicionarEvento = () => {
     const eventoData = {
       nome,
       descricao,
-      data: `${dataEvento.toISOString().split("T")[0]}T${horaEvento}:00`,
+      data: `${dataEvento.toISOString().split("T")[0]}T${horaEvento || "00:00"}:00`,
       local: `${estado} - ${cidade}, ${endereco}, ${regiao}`,
-      imagem: "default-image.png",
+      imagem: imagem || "default-image.png",
     };
 
     setLoading(true);
 
     try {
-      const response = await apiPost("/evento/marcar", eventoData);
+      let response;
+      if (id) {
+        response = await apiPut(`/evento/atualizar/${id}`, eventoData);
+      } else {
+        response = await apiPost("/evento/marcar", eventoData);
+      }
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log("Evento cadastrado:", responseData);
+        console.log(id ? "Evento atualizado:" : "Evento cadastrado:", responseData);
 
         setNome("");
         setData("");
@@ -56,18 +90,24 @@ const AdicionarEvento = () => {
           navigate("/eventos");
         }, 1500);
       } else {
-        console.error("Erro ao cadastrar evento");
+        console.error(id ? "Erro ao atualizar evento" : "Erro ao cadastrar evento");
       }
     } catch (error) {
-      console.error("Erro ao cadastrar evento:", error);
+      console.error("Erro ao salvar evento:", error);
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    if (id) {
+      fetchEvento(id);
+    }
+  }, [id]);
+
   return (
     <div className="container-form-evento">
-      <h1 className="titulo-form-evento">Novo evento</h1>
+      <h1 className="titulo-form-evento">{id ? "Editar Evento" : "Novo Evento"}</h1>
       <div className="content-form-evento">
         <form className="form-evento" onSubmit={handleSubmit}>
           <label htmlFor="nome">Nome</label>
@@ -138,15 +178,13 @@ const AdicionarEvento = () => {
             placeholder="Digite aqui..."
           ></textarea>
 
-          {/* Input para colocar a imagem do evento */}
           <label>Imagem</label>
           <label htmlFor="uploadImage" className="upload-label">
             <img id="iconUpload" src={IconUpload} alt="Upload" />
             <span>Faça o upload da capa ou arraste o arquivo</span>
           </label>
 
-          {/* Botão de salvar */}
-          <Button className="button" text={loading ? "Carregando..." : "Salvar"} />
+          <Button className="button" text={loading ? "Carregando..." : id ? "Atualizar Evento" : "Salvar Evento"} />
         </form>
       </div>
     </div>

@@ -3,12 +3,18 @@ import "../../../styles/Cards/CardEventos/style.css"
 import Button from "../../Button"
 import { useAuth } from "../../../hooks/useAuth";
 import { FaCalendarAlt, FaMapMarkerAlt, FaTrash, FaPen } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // Importando o hook de navegação
 
 const CardEventos = ({ img, titulo, local, data, onDelete, id }) => {
     const { isAdmin } = useAuth();
+    const navigate = useNavigate(); // Hook para navegação
 
     const handleDelete = () => {
-            onDelete(id);
+        onDelete(id);
+    };
+
+    const handleEdit = () => {
+        navigate(`/editar-evento/${id}`); // Redireciona para a página de edição com o id
     };
 
     return (
@@ -35,6 +41,7 @@ const CardEventos = ({ img, titulo, local, data, onDelete, id }) => {
                         <p>
                             <FaPen
                                 style={{ cursor: "pointer" }}
+                                onClick={handleEdit} // Chama a função de edição ao clicar no lápis
                             />
                         </p>
                     </div>

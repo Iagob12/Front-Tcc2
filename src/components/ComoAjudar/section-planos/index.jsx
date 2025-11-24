@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../../styles/ComoAjudar/section-planos/style.css"
 import Button from "../../../components/Button"
 import AnimatedSection from "../../AnimatedSection";
 import { Link } from "react-router-dom";
+import ModalEmDesenvolvimento from "../../Modais/ModalEmDesenvolvimento";
 
 export default function SectionPlanos() {
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const handleDoacaoEmDesenvolvimento = () => {
+        setModalOpen(true);
+    };
+
     return (
         <>
         <AnimatedSection delay={0.4}>
@@ -21,12 +28,12 @@ export default function SectionPlanos() {
                         
                     </div>
                     <div className="cards-doacao">
-                        <div className="mensal">
+                        <div className="mensal" onClick={handleDoacaoEmDesenvolvimento} style={{ cursor: 'pointer' }}>
                             <p>Mensal</p>
                             <h4>Escolha um valor <br /> fixo para doar<br /> mensalmente</h4>
                             <Button text={"Continue"} />
                         </div>
-                    <div className="doe-agora">
+                    <div className="doe-agora" onClick={handleDoacaoEmDesenvolvimento} style={{ cursor: 'pointer' }}>
                         <p>Doe agora</p>
                         <h5>Faça sua doação agora mesmo</h5>
                         <button>Continue</button>
@@ -39,6 +46,7 @@ export default function SectionPlanos() {
             </div>
             </section>
             </AnimatedSection>
+            <ModalEmDesenvolvimento isOpen={modalOpen} onClose={() => setModalOpen(false)} />
         </>
     )
 }

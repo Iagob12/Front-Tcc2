@@ -1,246 +1,299 @@
-import "../../../styles/Home/AdicionarAtividade/style.css";
-import Button from "../../Button";
+import React, { useState, useEffect, useRef } from "react";
+import "../../../styles/Blog/adicionar-noticia/style.css";
 import IconUpload from "../../../assets/Blog/upload.svg";
-import { useState, useEffect } from "react";
-import { apiGet, apiPost, apiPut } from "../../../config/api"; 
-import { useNavigate, useParams } from "react-router-dom";
-import ImageCropModal from "../../PageBlog/ImageCropModal";
+import { X, Check } from "lucide-react";
+import Button from "../../Button";
+import ImageCropModal from '../../PageBlog/ImageCropModal';
+import { apiGet, apiPost, apiPut } from '../../../config/api';
+import { useToast } from '../../Toast/useToast';
+import ToastContainer from '../../Toast/ToastContainer';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const AdicionarAtividade = () => {
-    const navigate = useNavigate();
-    const { id } = useParams();
-    const isEdit = Boolean(id);
+  const toast = useToast();
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const isEdit = Boolean(id);
+  const fileInputRef = useRef(null);
+  
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageToCrop, setImageToCrop] = useState(null);
+  const [showCropModal, setShowCropModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    nome: "",
+    descricao: "",
+    data: "",
+    hora: "",
+    vagas: 0
+  });
 
-    const [formData, setFormData] = useState({
-        nome: "",
-        descricao: "",
-        data: "",
-        hora: "",
-        vagas: 0,
+  useEffect(() => {
+    if (isEdit) {
+      apiGet(`/curso/listar`)
+        .then(res => res.json())
+        .then(data => {
+          const curso = data.find(c => c.id === Number(id));
+          if (curso) {
+            setFormData({
+              nome: curso.titulo,
+              descricao: curso.descricao,
+              data: curso.dias,
+              hora: curso.horario,
+              vagas: curso.vagas,
+            });
+            if (curso.imagem) setImagePreview(curso.imagem);
+          }
+        })
+        .catch(err => console.error(err));
+    }
+  }, [id, isEdit]);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast.warning("Por favor, selecione apenas arquivos de imagem.");
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        toast.warning("A imagem deve ter no máximo 5MB.");
+        return;
+      }
+
+      const imageUrl = URL.createObjectURL(file);
+      setImageToCrop(imageUrl);
+      setShowCropModal(true);
+    }
+  };
+
+  const handleCropComplete = (croppedImage) => {
+    setImagePreview(croppedImage);
+    setShowCropModal(false);
+    setImageToCrop(null);
+    toast.success("Imagem ajustada com sucesso!");
+  };
+
+  const handleCropCancel = () => {
+    setShowCropModal(false);
+    setImageToCrop(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const removeImage = () => {
+    setImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const confirmImage = () => {
+    if (imagePreview) {
+      toast.success("Imagem confirmada!");
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
     });
+  };
 
-    const [imagePreview, setImagePreview] = useState(null);
-    const [imageFile, setImageFile] = useState(null);
-    const [showCropModal, setShowCropModal] = useState(false);
-    const [imageToCrop, setImageToCrop] = useState(null);
-    const [loading, setLoading] = useState(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    useEffect(() => {
-        if (isEdit) {
-            apiGet(`/curso/listar`)
-                .then(res => res.json())
-                .then(data => {
-                    const curso = data.find(c => c.id === Number(id));
-                    if (curso) {
-                        setFormData({
-                            nome: curso.titulo,
-                            descricao: curso.descricao,
-                            data: curso.dias,
-                            hora: curso.horario,
-                            vagas: curso.vagas,
-                        });
-                        if (curso.imagem) setImagePreview(curso.imagem);
-                    }
-                })
-                .catch(err => console.error(err));
+    if (loading) return;
+
+    if (!formData.nome || !formData.descricao || !formData.data || !formData.hora || !formData.vagas) {
+      toast.warning("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    if (!isEdit && !imagePreview) {
+      toast.warning("Por favor, selecione uma imagem para a atividade.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      let imagemBase64 = null;
+
+      if (imagePreview) {
+        if (imagePreview.startsWith('data:image')) {
+          imagemBase64 = imagePreview;
+        } else {
+          const response = await fetch(imagePreview);
+          const blob = await response.blob();
+          
+          const reader = new FileReader();
+          
+          imagemBase64 = await new Promise((resolve, reject) => {
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          });
         }
-    }, [id, isEdit]);
+      }
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
+      const dto = {
+        titulo: formData.nome,
+        descricao: formData.descricao,
+        dias: formData.data,
+        horario: formData.hora,
+        vagas: Number(formData.vagas),
+        imagem: imagemBase64,
+      };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+      let response;
+      if (isEdit) {
+        response = await apiPut(`/curso/atualizar/${id}`, dto);
+      } else {
+        response = await apiPost("/curso/cadastrar", dto);
+      }
 
-        if (!file.type.startsWith("image/")) {
-            alert("Por favor, selecione apenas arquivos de imagem.");
-            return;
-        }
+      if (response.ok) {
+        toast.success(isEdit ? "Atividade atualizada com sucesso!" : "Atividade cadastrada com sucesso!");
+        setTimeout(() => {
+          navigate(-1);
+        }, 1500);
+      } else if (response.status === 401) {
+        toast.error("Você precisa estar logado para criar uma atividade.");
+      } else if (response.status === 403) {
+        toast.error("Você não tem permissão para criar uma atividade.");
+      } else {
+        const error = await response.json();
+        toast.error(error.message || "Erro ao salvar atividade.");
+      }
+    } catch (error) {
+      console.error("Erro:", error);
+      toast.error("Erro ao salvar atividade. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        if (file.size > 5 * 1024 * 1024) {
-            alert("A imagem deve ter no máximo 5MB.");
-            return;
-        }
+  return (
+    <>
+      <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
+      <div className="container-form-noticia">
+        <div className="content-form-noticia">
+          <h2>{isEdit ? "Editar Atividade" : "Cadastre uma nova atividade"}</h2>
 
-        const imageUrl = URL.createObjectURL(file);
-        setImageToCrop(imageUrl);
-        setShowCropModal(true);
-    };
+          <form className="form-noticia" onSubmit={handleSubmit}>
+            <label htmlFor="uploadImage" className="upload-label">
+              {imagePreview ? (
+                <div className="preview-wrapper">
+                  <img src={imagePreview} alt="Prévia da imagem" className="preview-image" />
+                  <div className="image-actions">
+                    <button type="button" className="action-btn" onClick={removeImage}>
+                      <X size={24} color="#fff" />
+                    </button>
+                    <button type="button" className="action-btn" onClick={confirmImage}>
+                      <Check size={24} color="#fff" />
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <img id="iconUpload" src={IconUpload} alt="Upload" />
+                  <span>Faça o upload da capa ou arraste o arquivo</span>
+                </>
+              )}
+            </label>
 
-    const handleCropComplete = (croppedImage) => {
-        setImagePreview(croppedImage);
-        setShowCropModal(false);
-        setImageToCrop(null);
-    };
+            <input
+              ref={fileInputRef}
+              type="file"
+              id="uploadImage"
+              name="image"
+              accept="image/*"
+              onChange={handleImageChange}
+              style={{ display: "none" }}
+            />
 
-    const handleCropCancel = () => {
-        setShowCropModal(false);
-        setImageToCrop(null);
-        const fileInput = document.getElementById("uploadImage");
-        if (fileInput) fileInput.value = "";
-    };
+            <label htmlFor="nome" className="label-noticia">Nome da Atividade</label>
+            <input
+              type="text"
+              id="nome"
+              name="nome"
+              className="input-noticia"
+              placeholder="Digite o nome da atividade"
+              value={formData.nome}
+              onChange={handleInputChange}
+              required
+            />
 
-    const removeImage = () => {
-        setImagePreview(null);
-        setImageFile(null);
-        const fileInput = document.getElementById("uploadImage");
-        if (fileInput) fileInput.value = "";
-    };
+            <label htmlFor="descricao" className="label-noticia">Descrição</label>
+            <textarea
+              id="descricao"
+              name="descricao"
+              className="input-noticia"
+              placeholder="Descreva a atividade em detalhes"
+              value={formData.descricao}
+              onChange={handleInputChange}
+              required
+            />
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+            <label htmlFor="data" className="label-noticia">Dias da Semana</label>
+            <input
+              type="text"
+              id="data"
+              name="data"
+              className="input-noticia"
+              placeholder="Ex: Segunda a Sexta"
+              value={formData.data}
+              onChange={handleInputChange}
+              required
+            />
 
-        if (loading) return;
+            <label htmlFor="hora" className="label-noticia">Horário</label>
+            <input
+              type="time"
+              id="hora"
+              name="hora"
+              className="input-noticia"
+              value={formData.hora}
+              onChange={handleInputChange}
+              required
+            />
 
-        setLoading(true);
+            <label htmlFor="vagas" className="label-noticia">Número de Vagas</label>
+            <input
+              type="number"
+              id="vagas"
+              name="vagas"
+              className="input-noticia"
+              placeholder="Digite o número de vagas disponíveis"
+              value={formData.vagas}
+              onChange={handleInputChange}
+              min={0}
+              required
+            />
 
-        try {
-            let imagemBase64 = null;
+            <Button
+              type="submit"
+              text={loading ? "Salvando..." : (isEdit ? "Atualizar Atividade" : "Salvar Atividade")}
+              disabled={loading}
+            />
+          </form>
 
-            if (imagePreview) {
-                if (imagePreview.startsWith('data:image')) {
-                    imagemBase64 = imagePreview;
-                } else {
-                    const response = await fetch(imagePreview);
-                    const blob = await response.blob();
-                    
-                    imagemBase64 = await new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.onloadend = () => resolve(reader.result);
-                        reader.onerror = reject;
-                        reader.readAsDataURL(blob);
-                    });
-                }
-            }
-
-            const dto = {
-                titulo: formData.nome,
-                descricao: formData.descricao,
-                dias: formData.data,
-                horario: formData.hora,
-                vagas: Number(formData.vagas),
-                imagem: imagemBase64,
-            };
-
-            let response;
-            if (isEdit) {
-                response = await apiPut(`/curso/atualizar/${id}`, dto);
-            } else {
-                response = await apiPost("/curso/cadastrar", dto);
-            }
-
-            if (response.ok) {
-                alert(isEdit ? "Atividade atualizada com sucesso!" : "Atividade cadastrada com sucesso!");
-                navigate(-1);
-            } else {
-                alert("Erro ao salvar atividade. Tente novamente.");
-                console.error(response.status);
-            }
-        } catch (error) {
-            alert("Erro ao conectar com a API. Tente novamente.");
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div className="container-form-atividade">
-            <h1 className="titulo-form-atividade">{isEdit ? "Editar Atividade" : "Nova atividade"}</h1>
-            <div className="content-form-atividade">
-                <form className="form-atividade" onSubmit={handleSubmit}>
-                    <label htmlFor="nome">Nome</label>
-                    <input
-                        name="nome"
-                        type="text"
-                        placeholder="Nome da atividade"
-                        value={formData.nome}
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <label htmlFor="descricao">Descrição</label>
-                    <input
-                        name="descricao"
-                        type="text"
-                        placeholder="Descrição da atividade"
-                        value={formData.descricao}
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <div className="data-hora">
-                        <label htmlFor="data">Data e hora</label>
-                        <input
-                            name="data"
-                            type="text"
-                            placeholder="Segunda a Sexta"
-                            value={formData.data}
-                            onChange={handleChange}
-                            required
-                        />
-                        <input
-                            name="hora"
-                            type="time"
-                            value={formData.hora}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <label htmlFor="vagas">Número de vagas</label>
-                    <input
-                        name="vagas"
-                        type="number"
-                        value={formData.vagas}
-                        onChange={handleChange}
-                        min={0}
-                        required
-                    />
-
-                    <label>Imagem</label>
-                    <label htmlFor="uploadImage" className="upload-label">
-                        {imagePreview ? (
-                            <div className="preview-wrapper">
-                                <img src={imagePreview} alt="Prévia da imagem" className="preview-image" />
-                                <button type="button" className="remove-btn" onClick={removeImage}>Remover imagem</button>
-                            </div>
-                        ) : (
-                            <>
-                                <img id="iconUpload" src={IconUpload} alt="Upload" />
-                                <span>Faça o upload da capa ou arraste o arquivo</span>
-                            </>
-                        )}
-                    </label>
-
-                    <input
-                        type="file"
-                        id="uploadImage"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        style={{ display: "none" }}
-                    />
-
-                    <Button 
-                        className="button" 
-                        text={loading ? "Salvando..." : "Salvar"}
-                        disabled={loading}
-                    />
-                </form>
-            </div>
-
-            {showCropModal && imageToCrop && (
-                <ImageCropModal
-                    image={imageToCrop}
-                    onClose={handleCropCancel}
-                    onCropComplete={handleCropComplete}
-                />
-            )}
         </div>
-    );
+      </div>
+
+      {showCropModal && imageToCrop && (
+        <ImageCropModal
+          image={imageToCrop}
+          onClose={handleCropCancel}
+          onCropComplete={handleCropComplete}
+        />
+      )}
+    </>
+  );
 };
 
 export default AdicionarAtividade;

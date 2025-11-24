@@ -54,3 +54,69 @@
     padding: 10px;
     font-weight: 600;
 }
+
+/* Wrappers para cards com botões */
+.blog-card-wrapper,
+.voluntario-card-wrapper {
+    position: relative;
+}
+
+/* Botões de ação */
+.blog-actions,
+.voluntario-actions {
+    display: flex;
+    gap: 10px;
+    padding: 15px 20px;
+    background: var(--color-grey-light);
+    justify-content: flex-end;
+}
+
+.btn-aprovar,
+.btn-rejeitar {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-aprovar {
+    background: #28a745;
+    color: white;
+}
+
+.btn-aprovar:hover:not(:disabled) {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-rejeitar {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-rejeitar:hover:not(:disabled) {
+    background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-aprovar:disabled,
+.btn-rejeitar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.sem-solicitacoes {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--color-grey);
+    font-size: 18px;
+}

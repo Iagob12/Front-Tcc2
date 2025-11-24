@@ -6,6 +6,13 @@
     transition: 0.5s ;
 }
 
+.cardEventos-container img {
+    width: 350px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 20px 0 0 20px;
+}
+
 .cardEventos-info{
     display: flex;
     flex-direction: column;
@@ -64,6 +71,12 @@
         flex-direction: column;
     }
 
+    .cardEventos-container img {
+        width: 100%;
+        height: 250px;
+        border-radius: 20px 20px 0 0;
+    }
+
     .cardEventos-info h2 {
         font-size: 24px;
         padding-top: 32px;
@@ -82,6 +95,10 @@
 }
 
 @media (max-width: 480px) {
+    .cardEventos-container img {
+        height: 200px;
+    }
+
     .cardEventos-info h2 {
         font-size: 20px;
     }

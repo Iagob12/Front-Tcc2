@@ -4,13 +4,12 @@ import { useEffect } from 'react';
 import Home from "./pages/Home";
 import Eventos from "./pages/Eventos";
 import Cadastro from "./pages/Cadastro";
-import PageEditarPerfil from "./pages/PageEditarPerfil"
+import EditarPerfil from "./pages/EditarPerfil";
 import ComoAjudar from "./pages/ComoAjudar";
 import Login from "./pages/Login";
 import Tarefas from './pages/Tarefas';
 import TornarVoluntario from "./pages/TornarVoluntario";
-import PageTarefas from "./pages/Tarefas"
-import SerVoluntario from "./components/SerVoluntario"
+import SerVoluntario from "./components/SerVoluntario";
 import SobreNos from "./pages/SobreNos";
 import Blog from "./pages/Blog";
 import AdicionarNoticia from "./pages/AdicionarNoticia";
@@ -19,8 +18,10 @@ import AdicionarAtividade from "./pages/AdicionarAtividade";
 import OAuth2Callback from "./pages/OAuth2Callback";
 import PageSistemaAprovacao from "./pages/SistemaAprovacao";
 import PageRelatorios from "./pages/PageRelatorios";
+import PageGerenciarInscricoes from "./pages/GerenciarInscricoes";
 import BlogDetails from "./components/SistemaAprovacao/BlogDetails";
-import VoluntarioDetails from "./components/SistemaAprovacao/VoluntarioDetails"
+import BlogDetalhes from "./components/PageBlog/BlogDetalhes";
+import VoluntarioDetails from "./components/SistemaAprovacao/VoluntarioDetails";
 
 
 // Componente para scroll to top ao navegar
@@ -48,18 +49,17 @@ const App = () => {
         <Route path="/oauth2/callback" element={<OAuth2Callback />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastrar-se" element={<Cadastro />} />
-        <Route path="/editar-perfil" element={< PageEditarPerfil/>} />
+        <Route path="/editar-perfil" element={<EditarPerfil />} />
         <Route path="/eventos" element={<Eventos />} />
         <Route path="/como-ajudar" element={<ComoAjudar />} />
         <Route path="/sobre" element={<SobreNos />} />
         <Route path="/tarefas" element={<Tarefas />} />
         <Route path="/voluntario" element={<TornarVoluntario />} />
         <Route path="/quero-ser-voluntario" element={<TornarVoluntario />} />
-        <Route path="/tarefas" element={<PageTarefas />} />
         
         {/* Blog */}
         <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:id" element={<BlogDetails />} />
+        <Route path="/blog/:id" element={<BlogDetalhes />} />
         <Route path="/adicionar-noticia" element={<AdicionarNoticia />} />
         <Route path="/adicionar-evento" element={<AdicionarEvento />} />
         <Route path="/editar-evento/:id" element={<AdicionarEvento />} />
@@ -72,6 +72,8 @@ const App = () => {
         <Route path="/sistema-aprovacao/detalhes-blog/:id" element={<BlogDetails />} />
         <Route path="/sistema-aprovacao/detalhes-voluntario/:id" element={<VoluntarioDetails />} />
         
+        {/* Gerenciamento */}
+        <Route path="/gerenciar-inscricoes" element={<PageGerenciarInscricoes />} />
         <Route path="/gerenciar-relatorios" element={<PageRelatorios />} />
       </Routes>
     </>

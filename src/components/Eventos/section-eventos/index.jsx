@@ -62,7 +62,7 @@ export default function SectionEventos() {
               key={evento.id}
               id={evento.id}
               titulo={evento.nome}
-              img={defaultImg}
+              img={evento.imagemUrl || defaultImg}
               local={evento.local}
               data={evento.data}
               onDelete={() => handleDeleteClick(evento.id)}

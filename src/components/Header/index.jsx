@@ -200,7 +200,7 @@ const Header = () => {
 
           {/* Botões no menu mobile */}
           <div className="mobile-menu-buttons">
-            <Link to="/como-ajudar" onClick={() => setMobileMenuAberto(false)}>
+            <Link to="/como-ajudar#doacao" onClick={() => setMobileMenuAberto(false)}>
               <Button text="Doe Agora" primary={true} />
             </Link>
             
@@ -225,7 +225,7 @@ const Header = () => {
 
         {/* Botões Desktop */}
         <div className="header-buttons hide-desktop">
-          <Link to="/como-ajudar">
+          <Link to="/como-ajudar#doacao">
             <Button text="Doe Agora" primary={true} />
           </Link>
 
@@ -280,7 +280,14 @@ const Header = () => {
                     <button >
                       {isAdmin && (
                         <Link className="perfil-menu-item" to="/sistema-aprovacao">
-                          Sistema de aprovacao
+                          Sistema de aprovação
+                        </Link>
+                      )}
+                    </button>
+                    <button >
+                      {isAdmin && (
+                        <Link className="perfil-menu-item" to="/gerenciar-inscricoes">
+                          Gerenciar inscrições
                         </Link>
                       )}
                     </button>

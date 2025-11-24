@@ -4,7 +4,7 @@ import Button from "../../Button";
 import IconUpload from "../../../assets/Blog/upload.svg";
 import { X, Check } from "lucide-react";
 import ImageCropModal from '../../PageBlog/ImageCropModal';
-import { apiPost, apiPut, apiGet } from "../../../config/api";
+import { apiPost, apiPut, apiGet, API_URL } from "../../../config/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from '../../Toast/useToast';
 import ToastContainer from '../../Toast/ToastContainer';
@@ -68,7 +68,7 @@ const AdicionarEvento = () => {
       const formData = new FormData();
       formData.append('file', blob, 'evento.jpg');
 
-      const uploadResponse = await fetch('http://192.168.15.14:8080/api/upload/image', {
+      const uploadResponse = await fetch(`${API_URL}/api/upload/image`, {
         method: 'POST',
         body: formData
       });

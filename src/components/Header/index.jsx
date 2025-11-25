@@ -265,36 +265,67 @@ const Header = () => {
                   {/* Seção de Acesso */}
                   <div className="perfil-section">
                     <h4 className="perfil-section-title">ACESSO</h4>
-                    <button>
-                      <Link className="perfil-menu-item" to="/editar-perfil" >
-                        Editar Perfil
-                      </Link>
+                    <button 
+                      className="perfil-menu-item" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log("🔵 Navegando para /editar-perfil");
+                        setPerfilAberto(false);
+                        navigate('/editar-perfil');
+                      }}
+                    >
+                      Editar Perfil
                     </button>
-                    <button >
-                      {isAdmin && (
-                        <Link className="perfil-menu-item" to="/gerenciar-relatorios">
-                          Acessar relatórios
-                        </Link>
-                      )}
-                    </button>
-                    <button >
-                      {isAdmin && (
-                        <Link className="perfil-menu-item" to="/sistema-aprovacao">
-                          Sistema de aprovação
-                        </Link>
-                      )}
-                    </button>
-                    <button >
-                      {isAdmin && (
-                        <Link className="perfil-menu-item" to="/gerenciar-inscricoes">
-                          Gerenciar inscrições
-                        </Link>
-                      )}
-                    </button>
-                    <button>
-                      <Link className="perfil-menu-item" to="/tarefas" >
-                        Tarefas
-                      </Link>
+                    {isAdmin && (
+                      <button 
+                        className="perfil-menu-item" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setPerfilAberto(false);
+                          navigate('/gerenciar-relatorios');
+                        }}
+                      >
+                        Acessar relatórios
+                      </button>
+                    )}
+                    {isAdmin && (
+                      <button 
+                        className="perfil-menu-item" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setPerfilAberto(false);
+                          navigate('/sistema-aprovacao');
+                        }}
+                      >
+                        Sistema de aprovação
+                      </button>
+                    )}
+                    {isAdmin && (
+                      <button 
+                        className="perfil-menu-item" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setPerfilAberto(false);
+                          navigate('/gerenciar-inscricoes');
+                        }}
+                      >
+                        Gerenciar inscrições
+                      </button>
+                    )}
+                    <button 
+                      className="perfil-menu-item" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setPerfilAberto(false);
+                        navigate('/tarefas');
+                      }}
+                    >
+                      Tarefas
                     </button>
                   </div>
 

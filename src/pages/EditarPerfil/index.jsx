@@ -43,10 +43,16 @@ const EditarPerfil = () => {
     try {
       setLoadingData(true);
       
+      console.log("🔍 EditarPerfil: Carregando dados do usuário...");
+      
       // Carregar dados do usuário
       const responseUsuario = await apiGet("/usuario/perfil");
+      console.log("📡 EditarPerfil: Resposta /usuario/perfil:", responseUsuario.status);
+      
       if (responseUsuario.ok) {
         const usuario = await responseUsuario.json();
+        console.log("✅ EditarPerfil: Dados carregados:", usuario);
+        
         setFormData({
           nome: usuario.nome || "",
           fotoPerfil: usuario.fotoPerfil || null
@@ -74,12 +80,25 @@ const EditarPerfil = () => {
           setIsVoluntario(false);
         }
       } else {
-        toast.error("Erro ao carregar dados do perfil.");
-        navigate("/");
+        console.error("❌ EditarPerfil: Erro ao carregar perfil, status:", responseUsuario.status);
+        const errorData = await responseUsuario.text();
+        console.error("❌ EditarPerfil: Resposta de erro:", errorData);
+        
+        toast.error("Erro ao carregar dados do perfil. Você precisa estar logado.");
+        
+        // Aguarda 2 segundos antes de redirecionar para dar tempo de ver o erro
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
       }
     } catch (error) {
-      console.error("Erro ao carregar dados:", error);
+      console.error("❌ EditarPerfil: Erro ao carregar dados:", error);
       toast.error("Erro ao carregar dados do perfil.");
+      
+      // Aguarda 2 segundos antes de redirecionar
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
     } finally {
       setLoadingData(false);
     }

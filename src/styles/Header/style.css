@@ -385,11 +385,15 @@ a.drop-item:hover{
     cursor: pointer;
     transition: all 0.2s ease;
     font-weight: 400;
+    pointer-events: auto;
+    position: relative;
+    z-index: 1;
 }
 
 .perfil-menu-item:hover {
     color: var(--color-secondary);
     padding-left: 8px;
+    text-decoration: none;
 }
 
 /* Botão de Logout */

@@ -27,7 +27,7 @@ const SectionLinhaTempo = ({ id }) => {
                     ano={2020}
                     img={card2}
                     acontecimento={"Pandemia"}
-                    texto={"Mesmo na pandemia, seguiramos com as entregas de sopa e cestas básicas"}
+                    texto={"Mesmo na pandemia, seguimos com as entregas de sopa e cestas básicas"}
                     invertido={true}
                 />
                 <Card

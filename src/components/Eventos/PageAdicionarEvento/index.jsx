@@ -4,7 +4,7 @@ import Button from "../../Button";
 import IconUpload from "../../../assets/Blog/upload.svg";
 import { X, Check } from "lucide-react";
 import ImageCropModal from '../../PageBlog/ImageCropModal';
-import { apiPost, apiPut, apiGet, API_URL } from "../../../config/api";
+import { apiPost, apiPut, apiGet } from "../../../config/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from '../../Toast/useToast';
 import ToastContainer from '../../Toast/ToastContainer';
@@ -14,14 +14,13 @@ const AdicionarEvento = () => {
   const { id } = useParams();
   const toast = useToast();
   const fileInputRef = useRef(null);
-  
+
   const [nome, setNome] = useState("");
   const [data, setData] = useState("");
   const [hora, setHora] = useState("");
   const [estado, setEstado] = useState("");
   const [cidade, setCidade] = useState("");
   const [endereco, setEndereco] = useState("");
-  const [regiao, setRegiao] = useState("");
   const [descricao, setDescricao] = useState("");
   const [imagemUrl, setImagemUrl] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
@@ -30,6 +29,7 @@ const AdicionarEvento = () => {
   const [loading, setLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
 
+  // ---------------- IMAGE HANDLERS ----------------
   const handleImageChange = useCallback((file) => {
     if (!file) return;
 
@@ -50,9 +50,7 @@ const AdicionarEvento = () => {
 
   const handleFileInputChange = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      handleImageChange(file);
-    }
+    if (file) handleImageChange(file);
   };
 
   const handleCropComplete = async (croppedImage) => {
@@ -62,28 +60,26 @@ const AdicionarEvento = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(croppedImage);
-      const blob = await response.blob();
-
-      const formData = new FormData();
-      formData.append('file', blob, 'evento.jpg');
-
-      const uploadResponse = await fetch(`${API_URL}/api/upload/image`, {
-        method: 'POST',
-        body: formData
-      });
-
-      if (uploadResponse.ok) {
-        const data = await uploadResponse.json();
-        setImagemUrl(data.url);
-        toast.success('Imagem enviada com sucesso!');
-      } else {
-        throw new Error('Erro ao fazer upload');
+      // converte para Base64 caso seja uma URL temporária
+      let base64 = croppedImage;
+      if (!croppedImage.startsWith("data:image")) {
+        const response = await fetch(croppedImage);
+        const blob = await response.blob();
+        const reader = new FileReader();
+        base64 = await new Promise((resolve, reject) => {
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
       }
+
+      setImagemUrl(base64);
+      toast.success('Imagem selecionada com sucesso!');
     } catch (error) {
-      console.error('Erro no upload:', error);
-      toast.error('Erro ao fazer upload da imagem. Tente novamente.');
+      console.error('Erro ao processar imagem:', error);
+      toast.error('Erro ao processar a imagem. Tente novamente.');
       setImagePreview(null);
+      setImagemUrl("");
     } finally {
       setLoading(false);
     }
@@ -92,9 +88,7 @@ const AdicionarEvento = () => {
   const handleCropCancel = () => {
     setShowCropModal(false);
     setImageToCrop(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const removeImage = (e) => {
@@ -102,141 +96,92 @@ const AdicionarEvento = () => {
     e.stopPropagation();
     setImagePreview(null);
     setImagemUrl("");
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const confirmImage = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (imagePreview) {
-      toast.success('Imagem confirmada!');
-    }
+    if (imagePreview) toast.success('Imagem confirmada!');
   };
 
-  const handleDragEnter = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  }, []);
-
-  const handleDragLeave = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  }, []);
-
-  const handleDragOver = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  }, []);
-
+  // ---------------- DRAG & DROP ----------------
+  const handleDragEnter = useCallback((e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); }, []);
+  const handleDragLeave = useCallback((e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(false); }, []);
+  const handleDragOver = useCallback((e) => { e.preventDefault(); e.stopPropagation(); }, []);
   const handleDrop = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
-
     const files = e.dataTransfer.files;
-    if (files && files.length > 0) {
-      handleImageChange(files[0]);
-    }
+    if (files && files.length > 0) handleImageChange(files[0]);
   }, [handleImageChange]);
 
+  // ---------------- FETCH EVENTO PARA EDIÇÃO ----------------
   const fetchEvento = async (id) => {
     try {
       const response = await apiGet(`/evento/${id}`);
       if (response.ok) {
         const evento = await response.json();
-
         setNome(evento.nome);
-        setData(evento.data.split("T")[0]);
         setDescricao(evento.descricao);
-        
-        const [estadoLocal, cidadeEndereco] = evento.local.split(" - ");
-        const [cidade, enderecoRegiao] = cidadeEndereco.split(", ");
-        const [endereco, regiao] = enderecoRegiao.split(", ");
+        setData(evento.data);
+        setHora(evento.hora?.substring(0,5));
 
+        const [estadoLocal, cidadeEndereco] = evento.local.split(" - ");
+        const [cidade, endereco] = cidadeEndereco.split(", ");
         setEstado(estadoLocal);
         setCidade(cidade);
         setEndereco(endereco);
-        setRegiao(regiao);
-        
+
         if (evento.imagemUrl) {
           setImagemUrl(evento.imagemUrl);
           setImagePreview(evento.imagemUrl);
         }
-      } else {
-        console.error("Erro ao carregar evento:", response.status);
       }
     } catch (error) {
       console.error("Erro ao buscar evento:", error);
     }
   };
 
+  useEffect(() => { if (id) fetchEvento(id); }, [id]);
+
+  // ---------------- SUBMIT ----------------
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (loading) return;
 
-    if (!nome || !data || !hora || !estado || !cidade || !endereco || !regiao || !descricao) {
+    if (!nome || !data || !hora || !estado || !cidade || !endereco || !descricao) {
       toast.warning("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
-    if (!id && !imagePreview) {
+    if (!id && !imagemUrl) {
       toast.warning("Por favor, selecione uma imagem para o evento.");
       return;
     }
 
-    const dataEvento = new Date(data);
-    const horaEvento = hora;
-
-    const eventoData = {
+    setLoading(true);
+    const eventoDTO = {
       nome,
       descricao,
-      data: `${dataEvento.toISOString().split("T")[0]}T${horaEvento || "00:00"}:00`,
-      local: `${estado} - ${cidade}, ${endereco}, ${regiao}`,
-      imagemUrl: imagemUrl || null,
+      data,
+      hora,
+      local: `${estado} - ${cidade}, ${endereco}`,
+      imagemUrl: imagemUrl || null, // Base64 aqui
     };
-
-    setLoading(true);
 
     try {
       let response;
-      if (id) {
-        response = await apiPut(`/evento/atualizar/${id}`, eventoData);
-      } else {
-        response = await apiPost("/evento/marcar", eventoData);
-      }
+      if (id) response = await apiPut(`/evento/atualizar/${id}`, eventoDTO);
+      else response = await apiPost("/evento/marcar", eventoDTO);
 
       if (response.ok) {
-        const responseData = await response.json();
-        console.log(id ? "Evento atualizado:" : "Evento cadastrado:", responseData);
-        
         toast.success(id ? "Evento atualizado com sucesso!" : "Evento cadastrado com sucesso!");
-
-        setNome("");
-        setData("");
-        setHora("");
-        setEstado("");
-        setCidade("");
-        setEndereco("");
-        setRegiao("");
-        setDescricao("");
-        setImagemUrl("");
-        setImagePreview(null);
-
-        setTimeout(() => {
-          navigate("/eventos");
-        }, 1500);
-      } else if (response.status === 401) {
-        toast.error("Você precisa estar logado para criar um evento.");
-      } else if (response.status === 403) {
-        toast.error("Você não tem permissão para criar um evento.");
+        setTimeout(() => navigate("/eventos"), 1500);
       } else {
         const error = await response.json();
-        toast.error(error.message || (id ? "Erro ao atualizar evento." : "Erro ao cadastrar evento."));
+        toast.error(error.message || "Erro ao salvar evento.");
       }
     } catch (error) {
       console.error("Erro ao salvar evento:", error);
@@ -246,12 +191,6 @@ const AdicionarEvento = () => {
     }
   };
 
-  useEffect(() => {
-    if (id) {
-      fetchEvento(id);
-    }
-  }, [id]);
-
   return (
     <>
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
@@ -259,7 +198,11 @@ const AdicionarEvento = () => {
         <div className="content-form-noticia">
           <h2>{id ? "Editar Evento" : "Cadastre um novo evento"}</h2>
           <form className="form-noticia" onSubmit={handleSubmit}>
-            <label htmlFor="uploadImage" className="upload-label"
+
+            {/* UPLOAD */}
+            <label
+              htmlFor="uploadImage"
+              className="upload-label"
               onDragEnter={handleDragEnter}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -295,6 +238,7 @@ const AdicionarEvento = () => {
               style={{ display: "none" }}
             />
 
+            {/* CAMPOS */}
             <label htmlFor="nome" className="label-noticia">Nome do Evento</label>
             <input
               id="nome"
@@ -365,18 +309,6 @@ const AdicionarEvento = () => {
               required
             />
 
-            <label htmlFor="regiao" className="label-noticia">Região/Bairro</label>
-            <input
-              id="regiao"
-              name="regiao"
-              type="text"
-              className="input-noticia"
-              placeholder="Digite a região ou bairro"
-              value={regiao}
-              onChange={(e) => setRegiao(e.target.value)}
-              required
-            />
-
             <label htmlFor="descricao" className="label-noticia">Descrição do Evento</label>
             <textarea
               id="descricao"
@@ -388,7 +320,7 @@ const AdicionarEvento = () => {
               required
             />
 
-            <Button 
+            <Button
               type="submit"
               text={loading ? "Carregando..." : id ? "Atualizar Evento" : "Salvar Evento"}
               disabled={loading}

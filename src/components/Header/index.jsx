@@ -126,9 +126,7 @@ const Header = () => {
     }
   };
 
-  const handleEditarPerfil = () => {
-    alert('Funcionalidade de editar perfil ainda não está disponível');
-  };
+
 
   return (
     <>

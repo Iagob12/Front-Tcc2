@@ -13,7 +13,7 @@ import IconUpload from "../../assets/Blog/upload.svg";
 const EditarPerfil = () => {
   const toast = useToast();
   const navigate = useNavigate();
-  const { user, checkAuth } = useAuth();
+  const { checkAuth } = useAuth();
   const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(true);

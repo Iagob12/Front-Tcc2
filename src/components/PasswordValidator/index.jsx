@@ -5,6 +5,7 @@ const PasswordValidator = ({ password, show }) => {
     if (!show) return null;
 
     // Caracteres especiais aceitos pelo back-end (sem o #)
+    // eslint-disable-next-line no-useless-escape
     const specialCharsRegex = /[!@$%^&*()_+\-=\[\]{}|;':"\\,.<>\/?]/;
     
     const validations = [

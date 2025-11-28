@@ -22,7 +22,7 @@ export default function Agenda() {
                         onClick={() => setOpcao("tarefas")} 
                         className={opcao === "tarefas" ? "ativo" : ""}
                     >
-                        minhas tarefas
+                        meus eventos
                     </p>
                 </div>
 

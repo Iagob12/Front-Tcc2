@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Tarefas from './pages/Tarefas';
 import TornarVoluntario from "./pages/TornarVoluntario";
 import SerVoluntario from "./components/SerVoluntario";
+import DashboardVoluntario from "./pages/DashboardVoluntario";
 import SobreNos from "./pages/SobreNos";
 import Blog from "./pages/Blog";
 import AdicionarNoticia from "./pages/AdicionarNoticia";
@@ -22,7 +23,6 @@ import PageGerenciarInscricoes from "./pages/GerenciarInscricoes";
 import BlogDetails from "./components/SistemaAprovacao/BlogDetails";
 import BlogDetalhes from "./components/PageBlog/BlogDetalhes";
 import VoluntarioDetails from "./components/SistemaAprovacao/VoluntarioDetails";
-
 
 // Componente para scroll to top ao navegar
 function ScrollToTop() {
@@ -65,7 +65,10 @@ const App = () => {
         <Route path="/editar-evento/:id" element={<AdicionarEvento />} />
         <Route path="/adicionar-atividade" element={<AdicionarAtividade />} />
         <Route path="/atividades/editar/:id" element={<AdicionarAtividade />} />
+
+        {/* Voluntariado */}
         <Route path="/ser-voluntario" element={<SerVoluntario />} />
+        <Route path="/dashboard-voluntario" element={<DashboardVoluntario />} /> {/* <-- NOVA ROTA */}
         
         {/* Sistema de aprovação */}
         <Route path="/sistema-aprovacao" element={<PageSistemaAprovacao />} />

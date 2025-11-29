@@ -17,6 +17,7 @@ const AdicionarAtividade = () => {
   const fileInputRef = useRef(null);
   
   const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const [imageToCrop, setImageToCrop] = useState(null);
   const [showCropModal, setShowCropModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -68,11 +69,15 @@ const AdicionarAtividade = () => {
     }
   };
 
-  const handleCropComplete = (croppedImage) => {
-    setImagePreview(croppedImage);
-    setShowCropModal(false);
-    setImageToCrop(null);
-    toast.success("Imagem ajustada com sucesso!");
+  const handleCropComplete = async (croppedImageBlob) => {
+    if (croppedImageBlob) {
+      const imageUrl = URL.createObjectURL(croppedImageBlob);
+      setImagePreview(imageUrl);
+      setImageFile(croppedImageBlob);
+      setShowCropModal(false);
+      setImageToCrop(null);
+      toast.success("Imagem ajustada com sucesso!");
+    }
   };
 
   const handleCropCancel = () => {
@@ -85,13 +90,14 @@ const AdicionarAtividade = () => {
 
   const removeImage = () => {
     setImagePreview(null);
+    setImageFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
   const confirmImage = () => {
-    if (imagePreview) {
+    if (imageFile) {
       toast.success("Imagem confirmada!");
     }
   };
@@ -123,21 +129,17 @@ const AdicionarAtividade = () => {
     try {
       let imagemBase64 = null;
 
-      if (imagePreview) {
-        if (imagePreview.startsWith('data:image')) {
-          imagemBase64 = imagePreview;
-        } else {
-          const response = await fetch(imagePreview);
-          const blob = await response.blob();
-          
-          const reader = new FileReader();
-          
-          imagemBase64 = await new Promise((resolve, reject) => {
-            reader.onloadend = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-          });
-        }
+      if (imageFile) {
+        const reader = new FileReader();
+        
+        imagemBase64 = await new Promise((resolve, reject) => {
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(imageFile);
+        });
+      } else if (imagePreview && typeof imagePreview === 'string' && imagePreview.startsWith('data:image')) {
+        // Caso de edição onde já temos base64
+        imagemBase64 = imagePreview;
       }
 
       const dto = {

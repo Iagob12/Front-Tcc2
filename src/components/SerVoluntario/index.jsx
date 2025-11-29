@@ -90,9 +90,7 @@ const SerVoluntario = () => {
 
     try {
       const response = await apiPost("/voluntario/tornar", dadosParaEnviar);
-      // Alguns backends retornam 200 + body, outros 201 etc — use o ok
-      const data = await response.json().catch(() => ({}));
-
+      
       if (response.ok) {
         alert("Inscrição como voluntário realizada com sucesso!");
         setFormData({
@@ -104,17 +102,28 @@ const SerVoluntario = () => {
         });
         navigate("/dashboard-voluntario");
       } else {
-        // Mensagem do backend (por ex. já é voluntário)
-        if (data.mensagem && data.mensagem.toLowerCase().includes("já")) {
-          alert("Você já tem uma inscrição de voluntário!");
-          navigate("/dashboard-voluntario");
-        } else {
-          alert(data.mensagem || "Não foi possível se inscrever como voluntário.");
+        // Tentar pegar a mensagem de erro do backend
+        const errorText = await response.text();
+        let errorMessage = "Não foi possível se inscrever como voluntário.";
+        
+        try {
+          const errorData = JSON.parse(errorText);
+          errorMessage = errorData.message || errorData.mensagem || errorMessage;
+        } catch {
+          // Se não for JSON, usar o texto direto
+          errorMessage = errorText || errorMessage;
         }
+        
+        alert(errorMessage);
       }
     } catch (error) {
       console.error("Erro:", error);
-      alert("Erro ao se inscrever como voluntário. Tente novamente.");
+      // Verificar se é um erro de validação do backend
+      if (error.message) {
+        alert(error.message);
+      } else {
+        alert("Erro ao se inscrever como voluntário. Tente novamente.");
+      }
     }
   };
 

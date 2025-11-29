@@ -69,6 +69,18 @@ const VoluntarioDetails = () => {
       </div>
 
       <section className="detalhes-voluntario">
+        {/* Foto de Perfil */}
+        <div className="field-detalhes-voluntario foto-perfil-container">
+          <img 
+            src={voluntario.idUsuario?.imagemPerfil || "https://via.placeholder.com/150?text=Sem+Foto"} 
+            alt="Foto de perfil" 
+            className="foto-perfil-voluntario"
+            onError={(e) => {
+              e.target.src = "https://via.placeholder.com/150?text=Sem+Foto";
+            }}
+          />
+        </div>
+
         <div className="field-detalhes-voluntario">
           <p className="field-name">Nome completo</p>
           <p className="field-detalhe">{voluntario.idUsuario?.nome}</p>

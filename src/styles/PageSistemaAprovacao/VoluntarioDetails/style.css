@@ -43,6 +43,22 @@
     font-size: 1rem;
 }
 
+.foto-perfil-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.foto-perfil-voluntario {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-primary, #b20000);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .opcoes-aprovar{
     display: flex;
     justify-content: center;

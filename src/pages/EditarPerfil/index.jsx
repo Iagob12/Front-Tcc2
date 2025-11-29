@@ -69,18 +69,23 @@ const EditarPerfil = () => {
           setImagePreview(usuario.imagemPerfil);
         }
         
-        // Verificar se é voluntário
+        // Verificar se é voluntário APROVADO
         try {
           const responseVoluntario = await apiGet(`/voluntario/usuario/${user.id}`);
           if (responseVoluntario.ok) {
             const voluntario = await responseVoluntario.json();
-            setIsVoluntario(true);
-            setVoluntarioData(voluntario);
-            setVoluntarioFormData({
-              telefone: voluntario.telefone || "",
-              endereco: voluntario.endereco || "",
-              descricao: voluntario.descricao || ""
-            });
+            // Só mostrar campos de voluntário se estiver APROVADO
+            if (voluntario.status === 'APROVADO') {
+              setIsVoluntario(true);
+              setVoluntarioData(voluntario);
+              setVoluntarioFormData({
+                telefone: voluntario.telefone || "",
+                endereco: voluntario.endereco || "",
+                descricao: voluntario.descricao || ""
+              });
+            } else {
+              setIsVoluntario(false);
+            }
           }
         } catch (error) {
           // Não é voluntário ou ainda não foi aprovado
@@ -88,15 +93,10 @@ const EditarPerfil = () => {
         }
       } else {
         console.error("❌ EditarPerfil: Erro ao carregar perfil, status:", responseUsuario.status);
-        const errorData = await responseUsuario.text();
-        console.error("❌ EditarPerfil: Resposta de erro:", errorData);
         
-        toast.error("Erro ao carregar dados do perfil. Você precisa estar logado.");
+        toast.error("Erro ao carregar dados do perfil.");
         
-        // Aguarda 2 segundos antes de redirecionar para dar tempo de ver o erro
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+        // Não redirecionar automaticamente, deixar o usuário decidir
       }
     } catch (error) {
       console.error("❌ EditarPerfil: Erro ao carregar dados:", error);

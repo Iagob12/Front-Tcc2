@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Tarefas from './pages/Tarefas';
 import TornarVoluntario from "./pages/TornarVoluntario";
 import CancelarVoluntariado from "./pages/CancelarVoluntariado";
+import GerenciarVoluntarios from "./pages/GerenciarVoluntarios";
 import SerVoluntario from "./components/SerVoluntario";
 import DashboardVoluntario from "./pages/DashBoardVoluntario";
 import SobreNos from "./pages/SobreNos";
@@ -70,6 +71,7 @@ const App = () => {
         {/* Voluntariado */}
         <Route path="/ser-voluntario" element={<SerVoluntario />} />
         <Route path="/cancelar-voluntariado" element={<CancelarVoluntariado />} />
+        <Route path="/gerenciar-voluntarios" element={<GerenciarVoluntarios />} />
         <Route path="/dashboard-voluntario" element={<DashboardVoluntario />} />
         
         {/* Sistema de aprovação */}

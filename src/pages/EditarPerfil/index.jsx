@@ -45,9 +45,16 @@ const EditarPerfil = () => {
       
       console.log("🔍 EditarPerfil: Carregando dados do usuário...");
       
-      // Carregar dados do usuário
-      const responseUsuario = await apiGet("/usuario/perfil");
-      console.log("📡 EditarPerfil: Resposta /usuario/perfil:", responseUsuario.status);
+      // Carregar dados do usuário logado
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user || !user.id) {
+        toast.error("Você precisa estar logado.");
+        navigate("/login");
+        return;
+      }
+      
+      const responseUsuario = await apiGet(`/usuario/${user.id}`);
+      console.log("📡 EditarPerfil: Resposta /usuario:", responseUsuario.status);
       
       if (responseUsuario.ok) {
         const usuario = await responseUsuario.json();
@@ -55,16 +62,16 @@ const EditarPerfil = () => {
         
         setFormData({
           nome: usuario.nome || "",
-          fotoPerfil: usuario.fotoPerfil || null
+          fotoPerfil: usuario.imagemPerfil || null
         });
         
-        if (usuario.fotoPerfil) {
-          setImagePreview(usuario.fotoPerfil);
+        if (usuario.imagemPerfil) {
+          setImagePreview(usuario.imagemPerfil);
         }
         
         // Verificar se é voluntário
         try {
-          const responseVoluntario = await apiGet("/voluntario/dados");
+          const responseVoluntario = await apiGet(`/voluntario/usuario/${user.id}`);
           if (responseVoluntario.ok) {
             const voluntario = await responseVoluntario.json();
             setIsVoluntario(true);
@@ -166,23 +173,25 @@ const EditarPerfil = () => {
         });
       }
 
-      // Atualizar dados do usuário
-      const usuarioData = {
+      // Preparar dados para enviar
+      const dadosPerfil = {
         nome: formData.nome,
-        fotoPerfil: fotoPerfilUrl
+        imagemPerfil: fotoPerfilUrl
       };
 
-      const responseUsuario = await apiPut("/usuario/perfil", usuarioData);
+      // Se for voluntário, adicionar telefone e endereço
+      if (isVoluntario) {
+        dadosPerfil.telefone = voluntarioFormData.telefone;
+        dadosPerfil.endereco = voluntarioFormData.endereco;
+      }
+
+      const responseUsuario = await apiPut("/usuario/editar-perfil", dadosPerfil);
       if (responseUsuario.ok) {
-        const usuarioAtualizado = await responseUsuario.json();
-        
-        // Atualizar dados do voluntário se for voluntário
-        if (isVoluntario && voluntarioData) {
-          const responseVoluntario = await apiPut("/voluntario/atualizar", voluntarioFormData);
-          if (!responseVoluntario.ok) {
-            toast.warning("Perfil atualizado, mas houve erro ao atualizar dados do voluntário.");
-          }
-        }
+        // Atualizar dados do usuário no localStorage
+        const user = JSON.parse(localStorage.getItem('user'));
+        user.nome = formData.nome;
+        user.imagemPerfil = fotoPerfilUrl;
+        localStorage.setItem('user', JSON.stringify(user));
         
         // Atualizar dados do usuário no contexto
         await checkAuth();

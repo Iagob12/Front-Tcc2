@@ -9,6 +9,7 @@ import ComoAjudar from "./pages/ComoAjudar";
 import Login from "./pages/Login";
 import Tarefas from './pages/Tarefas';
 import TornarVoluntario from "./pages/TornarVoluntario";
+import CancelarVoluntariado from "./pages/CancelarVoluntariado";
 import SerVoluntario from "./components/SerVoluntario";
 import DashboardVoluntario from "./pages/DashBoardVoluntario";
 import SobreNos from "./pages/SobreNos";
@@ -68,7 +69,8 @@ const App = () => {
 
         {/* Voluntariado */}
         <Route path="/ser-voluntario" element={<SerVoluntario />} />
-        <Route path="/dashboard-voluntario" element={<DashboardVoluntario />} /> {/* <-- NOVA ROTA */}
+        <Route path="/cancelar-voluntariado" element={<CancelarVoluntariado />} />
+        <Route path="/dashboard-voluntario" element={<DashboardVoluntario />} />
         
         {/* Sistema de aprovação */}
         <Route path="/sistema-aprovacao" element={<PageSistemaAprovacao />} />

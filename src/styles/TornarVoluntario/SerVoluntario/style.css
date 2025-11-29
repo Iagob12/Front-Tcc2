@@ -45,3 +45,92 @@
     min-height: 100px;
     resize: none;
 }
+
+/* Mensagem de Bloqueio */
+.mensagem-bloqueio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 40px;
+    max-width: 600px;
+    gap: 20px;
+}
+
+.icone-bloqueio {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.mensagem-bloqueio h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.mensagem-bloqueio p {
+    font-size: 1.1rem;
+    color: #666;
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+.btn-voltar {
+    margin-top: 30px;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-voltar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-voltar:active {
+    transform: translateY(0);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .content-ser-voluntario {
+        width: 90%;
+        padding: 30px 20px;
+        margin: 20px;
+    }
+
+    .mensagem-bloqueio {
+        padding: 40px 20px;
+    }
+
+    .icone-bloqueio {
+        font-size: 4rem;
+    }
+
+    .mensagem-bloqueio h2 {
+        font-size: 1.5rem;
+    }
+
+    .mensagem-bloqueio p {
+        font-size: 1rem;
+    }
+}

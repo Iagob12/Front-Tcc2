@@ -18,6 +18,7 @@ const SerVoluntario = () => {
 
   const [idUsuario, setIdUsuario] = useState(null);
   const [jaVoluntario, setJaVoluntario] = useState(false);
+  const [statusVoluntario, setStatusVoluntario] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Funções de formatação
@@ -90,10 +91,13 @@ const SerVoluntario = () => {
         const voluntario = await responseVoluntarioUsuario.json();
         if (voluntario) {
           setJaVoluntario(true);
-          // redireciona direto para dashboard (já tem inscrição)
-          navigate("/dashboard-voluntario");
-          setLoading(false);
-          return;
+          setStatusVoluntario(voluntario.status);
+          
+          // Se está PENDENTE ou APROVADO, bloquear acesso
+          if (voluntario.status === 'PENDENTE' || voluntario.status === 'APROVADO') {
+            setLoading(false);
+            return;
+          }
         }
       }
 
@@ -203,8 +207,35 @@ const SerVoluntario = () => {
         <div className="content-ser-voluntario">
           <h1>Inscrição de voluntário</h1>
 
-          {jaVoluntario ? (
-            <p>Você já tem uma inscrição como voluntário. Você será redirecionado ao painel.</p>
+          {jaVoluntario && (statusVoluntario === 'PENDENTE' || statusVoluntario === 'APROVADO') ? (
+            <div className="mensagem-bloqueio">
+              {statusVoluntario === 'PENDENTE' ? (
+                <>
+                  <div className="icone-bloqueio">⏳</div>
+                  <h2>Pedido em Análise</h2>
+                  <p>Você já possui um pedido para se tornar voluntário que está sendo analisado.</p>
+                  <p>Aguarde a aprovação da equipe. Você será notificado por email assim que houver uma resposta.</p>
+                  <button 
+                    className="btn-voltar" 
+                    onClick={() => navigate("/dashboard-voluntario")}
+                  >
+                    Ir para Dashboard
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="icone-bloqueio">✅</div>
+                  <h2>Você já é um Voluntário!</h2>
+                  <p>Seu pedido foi aprovado e você já faz parte da nossa equipe de voluntários.</p>
+                  <button 
+                    className="btn-voltar" 
+                    onClick={() => navigate("/dashboard-voluntario")}
+                  >
+                    Ir para Dashboard
+                  </button>
+                </>
+              )}
+            </div>
           ) : (
             <form className="form-ser-voluntario" onSubmit={handleSubmit}>
               <label htmlFor="dataNascimento">Data de Nascimento</label>

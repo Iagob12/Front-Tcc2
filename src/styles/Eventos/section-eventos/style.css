@@ -11,21 +11,16 @@
 .link-adicionar{
     color: var(--color-white);
     background: var(--color-secondary);
-    transition: 1s;
     border-radius: 10px;
+    font-size: 1.25rem;
     padding: 10px;
 }
 
 .link-adicionar:hover{
-    scale: 1.2;
     color: var(--color-secondary);
     background: none;
     border: 1px solid var(--color-secondary);
 }
-
-/* ========================================
-   RESPONSIVIDADE EVENTOS
-   ======================================== */
 
 /* Tablet */
 @media (max-width: 1024px) {

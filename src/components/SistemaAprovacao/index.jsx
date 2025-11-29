@@ -122,7 +122,7 @@ const SistemaAprovacao = () => {
     }
     setLoadingVoluntarioId(voluntarioId);
     try {
-      const response = await apiDelete(`/voluntario/negar/${voluntarioId}`);
+      const response = await apiPut(`/voluntario/cancelar/${voluntarioId}`);
       if (response.ok) {
         toast.success("Solicitação de voluntário rejeitada com sucesso!");
         fetchVoluntariosPendentes();

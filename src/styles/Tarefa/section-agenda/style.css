@@ -1,5 +1,6 @@
 .section-agenda{
     background: var(--color-grey-light);
+    min-height: 700px;
 }
 
 .agenda-tarefas{

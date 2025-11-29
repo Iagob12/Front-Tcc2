@@ -11,7 +11,7 @@ const Main = ({img, text}) => {
                 <div className="overlay-capa"/>
                 <h1>{text}</h1>
                 {text === "Tarefas" && (
-                    <p className="main-subtitle">Seja bem vindo a área de voluntários, aqui você pode acessar suas aulas e suas tarefas agendadas.</p>
+                    <p className="main-subtitle">Seja bem vindo a área de voluntários, aqui você pode acessar suas aulas e seus eventos agendados</p>
                 )}
             </main>
         </>

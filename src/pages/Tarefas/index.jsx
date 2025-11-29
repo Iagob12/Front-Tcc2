@@ -12,8 +12,6 @@ export default function Tarefas(){
         <>
             <Header />
             <Main text={"Tarefas"} img={img_tarefas} />
-            <Title title={"Tarefas"}/>
-            <SectionTarefas />
             <SectionAgenda />
             <Footer />
         </>

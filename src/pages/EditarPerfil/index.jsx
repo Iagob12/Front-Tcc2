@@ -35,6 +35,15 @@ const EditarPerfil = () => {
     descricao: ""
   });
 
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result); 
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   useEffect(() => {
     carregarDados();
   }, []);
@@ -42,11 +51,8 @@ const EditarPerfil = () => {
   const carregarDados = async () => {
     try {
       setLoadingData(true);
-      
-      console.log("🔍 EditarPerfil: Carregando dados do usuário...");
-      
-      // Carregar dados do usuário logado
       const user = JSON.parse(localStorage.getItem('user'));
+
       if (!user || !user.id) {
         toast.error("Você precisa estar logado.");
         navigate("/login");
@@ -54,58 +60,39 @@ const EditarPerfil = () => {
       }
       
       const responseUsuario = await apiGet(`/usuario/${user.id}`);
-      console.log("📡 EditarPerfil: Resposta /usuario:", responseUsuario.status);
       
       if (responseUsuario.ok) {
         const usuario = await responseUsuario.json();
-        console.log("✅ EditarPerfil: Dados carregados:", usuario);
-        
+
         setFormData({
           nome: usuario.nome || "",
           fotoPerfil: usuario.imagemPerfil || null
         });
-        
+
         if (usuario.imagemPerfil) {
           setImagePreview(usuario.imagemPerfil);
         }
-        
-        // Verificar se é voluntário APROVADO
+
         try {
           const responseVoluntario = await apiGet(`/voluntario/usuario/${user.id}`);
           if (responseVoluntario.ok) {
             const voluntario = await responseVoluntario.json();
-            // Só mostrar campos de voluntário se estiver APROVADO
             if (voluntario.status === 'APROVADO') {
               setIsVoluntario(true);
-              setVoluntarioData(voluntario);
               setVoluntarioFormData({
                 telefone: voluntario.telefone || "",
                 endereco: voluntario.endereco || "",
                 descricao: voluntario.descricao || ""
               });
-            } else {
-              setIsVoluntario(false);
             }
           }
-        } catch (error) {
-          // Não é voluntário ou ainda não foi aprovado
-          setIsVoluntario(false);
-        }
+        } catch {}
       } else {
-        console.error("❌ EditarPerfil: Erro ao carregar perfil, status:", responseUsuario.status);
-        
         toast.error("Erro ao carregar dados do perfil.");
-        
-        // Não redirecionar automaticamente, deixar o usuário decidir
       }
     } catch (error) {
-      console.error("❌ EditarPerfil: Erro ao carregar dados:", error);
       toast.error("Erro ao carregar dados do perfil.");
-      
-      // Aguarda 2 segundos antes de redirecionar
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+      setTimeout(() => navigate("/"), 2000);
     } finally {
       setLoadingData(false);
     }
@@ -132,27 +119,21 @@ const EditarPerfil = () => {
 
   const handleFileInputChange = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      handleImageChange(file);
-    }
+    if (file) handleImageChange(file);
   };
 
   const handleDrop = useCallback((e) => {
     e.preventDefault();
     const file = e.dataTransfer.files?.[0];
-    if (file) {
-      handleImageChange(file);
-    }
+    if (file) handleImageChange(file);
   }, [handleImageChange]);
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
+  const handleDragOver = (e) => e.preventDefault();
 
   const handleCropComplete = (croppedImageBlob) => {
     if (croppedImageBlob) {
-      const imageUrl = URL.createObjectURL(croppedImageBlob);
-      setImagePreview(imageUrl);
+      const previewUrl = URL.createObjectURL(croppedImageBlob);
+      setImagePreview(previewUrl);
       setImageFile(croppedImageBlob);
       setShowCropModal(false);
     }
@@ -163,70 +144,46 @@ const EditarPerfil = () => {
     setLoading(true);
 
     try {
-      let imagemPerfilUrl = formData.fotoPerfil;
+      let imagemPerfilBase64 = formData.fotoPerfil;
 
-      // Se houver nova imagem, fazer upload primeiro
+      // Se o usuário enviou nova imagem
       if (imageFile) {
-        const uploadFormData = new FormData();
-        uploadFormData.append('file', imageFile);
-
-        const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/upload/image`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: uploadFormData
-        });
-
-        if (uploadResponse.ok) {
-          const uploadData = await uploadResponse.json();
-          imagemPerfilUrl = uploadData.url;
-        } else {
-          toast.error("Erro ao fazer upload da imagem.");
-          setLoading(false);
-          return;
-        }
+        imagemPerfilBase64 = await fileToBase64(imageFile);
       }
 
-      // Preparar dados para enviar
       const dadosPerfil = {
         nome: formData.nome,
-        imagemPerfil: imagemPerfilUrl
+        imagemPerfil: imagemPerfilBase64
       };
 
-      // Se for voluntário, adicionar telefone e endereço
       if (isVoluntario) {
         dadosPerfil.telefone = voluntarioFormData.telefone;
         dadosPerfil.endereco = voluntarioFormData.endereco;
       }
 
       const responseUsuario = await apiPut("/usuario/editar-perfil", dadosPerfil);
+
       if (responseUsuario.ok) {
-        // Atualizar dados do usuário no localStorage (user e userData)
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-        
-        // Atualizar ambos os objetos
+
         user.nome = formData.nome;
-        user.imagemPerfil = imagemPerfilUrl;
+        user.imagemPerfil = imagemPerfilBase64;
         userData.nome = formData.nome;
-        userData.imagemPerfil = imagemPerfilUrl;
-        
+        userData.imagemPerfil = imagemPerfilBase64;
+
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('userData', JSON.stringify(userData));
-        
-        // Atualizar dados do usuário no contexto
+
         await checkAuth();
-        
+
         toast.success("Perfil atualizado com sucesso!");
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
+        setTimeout(() => navigate("/"), 800);
       } else {
         const error = await responseUsuario.json();
         toast.error(error.message || "Erro ao atualizar perfil.");
       }
+
     } catch (error) {
       console.error("Erro ao atualizar perfil:", error);
       toast.error("Erro ao atualizar perfil.");
@@ -258,9 +215,11 @@ const EditarPerfil = () => {
           <h1>Editar Perfil</h1>
           
           <form className="form-editar-perfil" onSubmit={handleSubmit}>
-            {/* Foto de Perfil */}
+
+            {/* FOTO DE PERFIL */}
             <div className="form-field">
               <label className="label-editar-perfil">Foto de Perfil (Opcional)</label>
+
               <div
                 className="upload-area-perfil"
                 onDrop={handleDrop}
@@ -291,6 +250,7 @@ const EditarPerfil = () => {
                   </div>
                 )}
               </div>
+
               <input
                 ref={fileInputRef}
                 type="file"
@@ -300,11 +260,9 @@ const EditarPerfil = () => {
               />
             </div>
 
-            {/* Nome */}
+            {/* NOME */}
             <div className="form-field">
-              <label className="label-editar-perfil" htmlFor="nome">
-                Nome *
-              </label>
+              <label className="label-editar-perfil" htmlFor="nome">Nome *</label>
               <input
                 type="text"
                 id="nome"
@@ -315,13 +273,11 @@ const EditarPerfil = () => {
               />
             </div>
 
-            {/* Campos do Voluntário */}
+            {/* CAMPOS DE VOLUNTÁRIO */}
             {isVoluntario && (
               <>
                 <div className="form-field">
-                  <label className="label-editar-perfil" htmlFor="telefone">
-                    Telefone
-                  </label>
+                  <label className="label-editar-perfil" htmlFor="telefone">Telefone</label>
                   <input
                     type="text"
                     id="telefone"
@@ -332,9 +288,7 @@ const EditarPerfil = () => {
                 </div>
 
                 <div className="form-field">
-                  <label className="label-editar-perfil" htmlFor="endereco">
-                    Endereço
-                  </label>
+                  <label className="label-editar-perfil" htmlFor="endereco">Endereço</label>
                   <input
                     type="text"
                     id="endereco"
@@ -345,9 +299,7 @@ const EditarPerfil = () => {
                 </div>
 
                 <div className="form-field">
-                  <label className="label-editar-perfil" htmlFor="descricao">
-                    Por que quer ser voluntário?
-                  </label>
+                  <label className="label-editar-perfil" htmlFor="descricao">Por que quer ser voluntário?</label>
                   <textarea
                     id="descricao"
                     value={voluntarioFormData.descricao}
@@ -370,6 +322,7 @@ const EditarPerfil = () => {
           </form>
         </div>
       </div>
+
       <Footer />
 
       {showCropModal && (

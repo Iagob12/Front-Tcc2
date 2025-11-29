@@ -20,6 +20,44 @@ const SerVoluntario = () => {
   const [jaVoluntario, setJaVoluntario] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Funções de formatação
+  const formatarCPF = (valor) => {
+    const numeros = valor.replace(/\D/g, '');
+    let cpfFormatado = numeros;
+    
+    if (numeros.length >= 3) {
+      cpfFormatado = numeros.slice(0, 3);
+      if (numeros.length >= 4) {
+        cpfFormatado += '.' + numeros.slice(3, 6);
+      }
+      if (numeros.length >= 7) {
+        cpfFormatado += '.' + numeros.slice(6, 9);
+      }
+      if (numeros.length >= 10) {
+        cpfFormatado += '-' + numeros.slice(9, 11);
+      }
+    }
+    
+    return cpfFormatado;
+  };
+
+  const formatarTelefone = (valor) => {
+    const numeros = valor.replace(/\D/g, '');
+    let telefoneFormatado = numeros;
+    
+    if (numeros.length >= 2) {
+      telefoneFormatado = '(' + numeros.slice(0, 2);
+      if (numeros.length >= 3) {
+        telefoneFormatado += ') ' + numeros.slice(2, 7);
+      }
+      if (numeros.length >= 8) {
+        telefoneFormatado += '-' + numeros.slice(7, 11);
+      }
+    }
+    
+    return telefoneFormatado;
+  };
+
   useEffect(() => {
     const buscarUsuario = async () => {
       const userData = JSON.parse(localStorage.getItem("userData") || "{}");
@@ -68,7 +106,15 @@ const SerVoluntario = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Aplicar formatação para CPF e telefone
+    if (name === 'cpf') {
+      setFormData(prev => ({ ...prev, [name]: formatarCPF(value) }));
+    } else if (name === 'telefone') {
+      setFormData(prev => ({ ...prev, [name]: formatarTelefone(value) }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -114,7 +160,16 @@ const SerVoluntario = () => {
           errorMessage = errorText || errorMessage;
         }
         
-        alert(errorMessage);
+        // Mensagens específicas
+        if (errorMessage.includes("CPF inválido")) {
+          alert("❌ CPF inválido. Verifique o número digitado e tente novamente.");
+        } else if (errorMessage.includes("em análise") || errorMessage.includes("PENDENTE")) {
+          alert("⏳ Você já possui um pedido para se tornar voluntário em análise. Aguarde a aprovação.");
+        } else if (errorMessage.includes("18 anos")) {
+          alert("⚠️ Você precisa ter 18 anos ou mais para se tornar voluntário.");
+        } else {
+          alert(errorMessage);
+        }
       }
     } catch (error) {
       console.error("Erro:", error);
@@ -164,8 +219,10 @@ const SerVoluntario = () => {
               <input
                 name="telefone"
                 type="text"
+                placeholder="(00) 00000-0000"
                 value={formData.telefone}
                 onChange={handleChange}
+                maxLength={15}
               />
 
               <label htmlFor="endereco">Endereço</label>
@@ -181,9 +238,10 @@ const SerVoluntario = () => {
               <input
                 name="cpf"
                 type="text"
-                placeholder="Digite seu CPF..."
+                placeholder="000.000.000-00"
                 value={formData.cpf}
                 onChange={handleChange}
+                maxLength={14}
               />
 
               <label htmlFor="descricao">Porque quero me voluntariar?</label>

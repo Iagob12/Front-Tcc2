@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import Cropper from 'react-easy-crop';
 import { X, Check, RotateCw, ZoomIn, ZoomOut } from 'lucide-react';
-import '../../../styles/Blog/image-crop-modal/style.css';
+import '../../styles/Blog/image-crop-modal/style.css';
 
-const ImageCropModal = ({ image, onClose, onCropComplete }) => {
+const ProfileImageCropModal = ({ image, onClose, onCropComplete }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
@@ -42,7 +42,7 @@ const ImageCropModal = ({ image, onClose, onCropComplete }) => {
     <div className="crop-modal-overlay">
       <div className="crop-modal-container">
         <div className="crop-modal-header">
-          <h3>Ajustar Imagem</h3>
+          <h3>Ajustar Foto de Perfil</h3>
           <button className="close-crop-btn" onClick={onClose}>
             <X size={24} />
           </button>
@@ -54,7 +54,9 @@ const ImageCropModal = ({ image, onClose, onCropComplete }) => {
             crop={crop}
             zoom={zoom}
             rotation={rotation}
-            aspect={16 / 9}
+            aspect={1}
+            cropShape="round"
+            showGrid={false}
             onCropChange={onCropChange}
             onZoomChange={onZoomChange}
             onCropComplete={onCropCompleteHandler}
@@ -152,4 +154,4 @@ async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
   });
 }
 
-export default ImageCropModal;
+export default ProfileImageCropModal;

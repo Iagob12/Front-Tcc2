@@ -7,7 +7,7 @@ import { useToast } from '../../components/Toast/useToast';
 import ToastContainer from '../../components/Toast/ToastContainer';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../../hooks/useAuth.js";
-import ImageCropModal from '../../components/PageBlog/ImageCropModal';
+import ProfileImageCropModal from '../../components/ProfileImageCropModal';
 import IconUpload from "../../assets/Blog/upload.svg";
 
 const EditarPerfil = () => {
@@ -150,10 +150,12 @@ const EditarPerfil = () => {
   };
 
   const handleCropComplete = (croppedImageBlob) => {
-    const imageUrl = URL.createObjectURL(croppedImageBlob);
-    setImagePreview(imageUrl);
-    setImageFile(croppedImageBlob);
-    setShowCropModal(false);
+    if (croppedImageBlob) {
+      const imageUrl = URL.createObjectURL(croppedImageBlob);
+      setImagePreview(imageUrl);
+      setImageFile(croppedImageBlob);
+      setShowCropModal(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -371,10 +373,10 @@ const EditarPerfil = () => {
       <Footer />
 
       {showCropModal && (
-        <ImageCropModal
+        <ProfileImageCropModal
           image={imageToCrop}
           onClose={() => setShowCropModal(false)}
-          onConfirm={handleCropComplete}
+          onCropComplete={handleCropComplete}
         />
       )}
     </>

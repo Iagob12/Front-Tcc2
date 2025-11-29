@@ -211,7 +211,22 @@ const Header = () => {
                 }}
                 aria-label="Abrir perfil"
               >
-                <User size={24} strokeWidth={2} />
+                {userData?.imagemPerfil ? (
+                  <img 
+                    src={userData.imagemPerfil} 
+                    alt="Foto de perfil" 
+                    className="profile-icon-image"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
+                  />
+                ) : null}
+                <User 
+                  size={24} 
+                  strokeWidth={2} 
+                  style={{ display: userData?.imagemPerfil ? 'none' : 'block' }}
+                />
               </button>
             ) : (
               <Link to="/cadastrar-se" onClick={() => setMobileMenuAberto(false)}>
@@ -235,7 +250,22 @@ const Header = () => {
                   onClick={() => setPerfilAberto(!perfilAberto)}
                   aria-label="Abrir perfil"
                 >
-                  <User size={24} strokeWidth={2} />
+                  {userData?.imagemPerfil ? (
+                    <img 
+                      src={userData.imagemPerfil} 
+                      alt="Foto de perfil" 
+                      className="profile-icon-image"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'block';
+                      }}
+                    />
+                  ) : null}
+                  <User 
+                    size={24} 
+                    strokeWidth={2} 
+                    style={{ display: userData?.imagemPerfil ? 'none' : 'block' }}
+                  />
                 </button>
 
                 {/* Dropdown de Perfil */}
@@ -243,7 +273,23 @@ const Header = () => {
                   {/* Informações do Usuário */}
                   <div className="perfil-user-info">
                     <div className="perfil-avatar">
-                      <User size={32} strokeWidth={2} />
+                      {userData?.imagemPerfil ? (
+                        <img 
+                          src={userData.imagemPerfil} 
+                          alt="Foto de perfil" 
+                          className="perfil-avatar-image"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                      ) : null}
+                      <div 
+                        className="perfil-avatar-icon"
+                        style={{ display: userData?.imagemPerfil ? 'none' : 'flex' }}
+                      >
+                        <User size={32} strokeWidth={2} />
+                      </div>
                     </div>
                     <div className="perfil-details">
                       <h3 className="perfil-name">{userData?.nome || 'Usuário'}</h3>

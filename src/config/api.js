@@ -19,6 +19,21 @@ export const createApiUrl = (endpoint) => {
     return `${API_URL}/${cleanEndpoint}`;
 };
 
+// Função para obter headers com autenticação
+const getAuthHeaders = () => {
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+    
+    // Adicionar token se existir
+    const token = localStorage.getItem('token');
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    
+    return headers;
+};
+
 // Configuração padrão para fetch
 export const fetchConfig = {
     credentials: 'include', // Sempre enviar cookies
@@ -31,7 +46,8 @@ export const fetchConfig = {
 export const apiGet = async (endpoint) => {
     const response = await fetch(createApiUrl(endpoint), {
         method: 'GET',
-        ...fetchConfig
+        credentials: 'include',
+        headers: getAuthHeaders()
     });
     return response;
 };
@@ -40,7 +56,8 @@ export const apiGet = async (endpoint) => {
 export const apiPost = async (endpoint, data) => {
     const response = await fetch(createApiUrl(endpoint), {
         method: 'POST',
-        ...fetchConfig,
+        credentials: 'include',
+        headers: getAuthHeaders(),
         body: JSON.stringify(data)
     });
     return response;
@@ -50,8 +67,9 @@ export const apiPost = async (endpoint, data) => {
 export const apiPut = async (endpoint, data) => {
     const response = await fetch(createApiUrl(endpoint), {
         method: 'PUT',
-        ...fetchConfig,
-        body: JSON.stringify(data)
+        credentials: 'include',
+        headers: getAuthHeaders(),
+        body: data ? JSON.stringify(data) : undefined
     });
     return response;
 };
@@ -60,7 +78,8 @@ export const apiPut = async (endpoint, data) => {
 export const apiDelete = async (endpoint) => {
     const response = await fetch(createApiUrl(endpoint), {
         method: 'DELETE',
-        ...fetchConfig
+        credentials: 'include',
+        headers: getAuthHeaders()
     });
     return response;
 };

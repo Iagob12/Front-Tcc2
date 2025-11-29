@@ -22,6 +22,7 @@ const SistemaAprovacao = () => {
   const [seletor, setSeletor] = useState("");
   const [blogsPendentes, setBlogsPendentes] = useState([]);
   const [voluntariosPendentes, setVoluntariosPendentes] = useState([]);
+  const [voluntariosAprovados, setVoluntariosAprovados] = useState([]);
   const [loadingBlogId, setLoadingBlogId] = useState(null);
   const [loadingVoluntarioId, setLoadingVoluntarioId] = useState(null);
   const toast = useToast();
@@ -52,6 +53,42 @@ const SistemaAprovacao = () => {
       }
     } catch (error) {
       console.error("Erro de rede:", error);
+    }
+  };
+
+  const fetchVoluntariosAprovados = async () => {
+    try {
+      const response = await apiGet("/voluntario/listar/aprovados");
+      if (response.ok) {
+        const data = await response.json();
+        setVoluntariosAprovados(data);
+      } else {
+        console.error("Erro ao buscar voluntários aprovados");
+      }
+    } catch (error) {
+      console.error("Erro de rede:", error);
+    }
+  };
+
+  const handleRemoverVoluntario = async (voluntarioId, nomeVoluntario, e) => {
+    e.stopPropagation();
+    if (!window.confirm(`Tem certeza que deseja remover ${nomeVoluntario} como voluntário?`)) {
+      return;
+    }
+    setLoadingVoluntarioId(voluntarioId);
+    try {
+      const response = await apiPut(`/voluntario/admin/remover-voluntario/${voluntarioId}`);
+      if (response.ok) {
+        toast.success("Voluntário removido com sucesso!");
+        fetchVoluntariosAprovados();
+      } else {
+        toast.error("Erro ao remover o voluntário.");
+      }
+    } catch (error) {
+      console.error("Erro ao remover voluntário:", error);
+      toast.error("Erro ao remover o voluntário.");
+    } finally {
+      setLoadingVoluntarioId(null);
     }
   };
 
@@ -142,6 +179,8 @@ const SistemaAprovacao = () => {
       fetchBlogsPendentes();
     } else if (seletor === "VOLUNTARIOS") {
       fetchVoluntariosPendentes();
+    } else if (seletor === "VOLUNTARIOS_APROVADOS") {
+      fetchVoluntariosAprovados();
     }
   }, [seletor]);
 
@@ -158,7 +197,8 @@ const SistemaAprovacao = () => {
                 Selecione uma opção
               </option>
               <option value="BLOGS">Blog</option>
-              <option value="VOLUNTARIOS">Voluntários</option>
+              <option value="VOLUNTARIOS">Voluntários Pendentes</option>
+              <option value="VOLUNTARIOS_APROVADOS">Gerenciar Voluntários</option>
             </select>
           </div>
 
@@ -248,6 +288,52 @@ const SistemaAprovacao = () => {
                 ) : (
                   <p className="sem-solicitacoes">
                     Não há solicitações de voluntários no momento!
+                  </p>
+                )}
+              </>
+            )}
+
+            {/* Voluntários Aprovados - Gerenciar */}
+            {seletor === "VOLUNTARIOS_APROVADOS" && (
+              <>
+                {voluntariosAprovados.length > 0 ? (
+                  <div className="tabela-voluntarios-container">
+                    <table className="tabela-voluntarios-aprovacao">
+                      <thead>
+                        <tr>
+                          <th>Nome</th>
+                          <th>Email</th>
+                          <th>Telefone</th>
+                          <th>CPF</th>
+                          <th>Data Cadastro</th>
+                          <th>Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {voluntariosAprovados.map((voluntario) => (
+                          <tr key={voluntario.id}>
+                            <td>{voluntario.idUsuario?.nome || 'N/A'}</td>
+                            <td>{voluntario.idUsuario?.email || 'N/A'}</td>
+                            <td>{voluntario.telefone || 'N/A'}</td>
+                            <td>{voluntario.cpf || 'N/A'}</td>
+                            <td>{formatDate(voluntario.dataVoluntario)}</td>
+                            <td>
+                              <button 
+                                className="btn-remover-tabela"
+                                onClick={(e) => handleRemoverVoluntario(voluntario.id, voluntario.idUsuario?.nome, e)}
+                                disabled={loadingVoluntarioId === voluntario.id}
+                              >
+                                {loadingVoluntarioId === voluntario.id ? "Removendo..." : "✕ Remover"}
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <p className="sem-solicitacoes">
+                    Não há voluntários aprovados no momento!
                   </p>
                 )}
               </>

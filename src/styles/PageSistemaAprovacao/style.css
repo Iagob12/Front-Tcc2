@@ -120,3 +120,81 @@
     color: var(--color-grey);
     font-size: 18px;
 }
+
+/* Tabela de Voluntários Aprovados */
+.tabela-voluntarios-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.tabela-voluntarios-aprovacao {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela-voluntarios-aprovacao thead {
+  background: #f8f9fa;
+}
+
+.tabela-voluntarios-aprovacao th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tabela-voluntarios-aprovacao td {
+  padding: 16px;
+  border-top: 1px solid #e9ecef;
+  color: #666;
+  font-size: 14px;
+}
+
+.tabela-voluntarios-aprovacao tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.btn-remover-tabela {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  background: #dc3545;
+  color: white;
+  transition: all 0.3s;
+}
+
+.btn-remover-tabela:hover:not(:disabled) {
+  background: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-remover-tabela:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .tabela-voluntarios-container {
+    overflow-x: auto;
+  }
+
+  .tabela-voluntarios-aprovacao {
+    min-width: 800px;
+  }
+
+  .tabela-voluntarios-aprovacao th,
+  .tabela-voluntarios-aprovacao td {
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+}

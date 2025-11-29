@@ -3,6 +3,7 @@ import { FaTimes } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { apiGet, apiPut } from "../../../config/api";
+import { getValidImageUrl } from "../../../utils/imageUtils";
 
 const VoluntarioDetails = () => {
   const { id } = useParams();
@@ -72,7 +73,10 @@ const VoluntarioDetails = () => {
         {/* Foto de Perfil */}
         <div className="field-detalhes-voluntario foto-perfil-container">
           <img 
-            src={voluntario.idUsuario?.imagemPerfil || "https://via.placeholder.com/150?text=Sem+Foto"} 
+            src={getValidImageUrl(
+              voluntario.idUsuario?.imagemPerfil, 
+              "https://via.placeholder.com/150?text=Sem+Foto"
+            )} 
             alt="Foto de perfil" 
             className="foto-perfil-voluntario"
             onError={(e) => {

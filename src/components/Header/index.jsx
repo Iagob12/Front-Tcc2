@@ -6,6 +6,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { apiGet, apiPost } from '../../config/api';
 import { User, X, Menu } from 'lucide-react';
 import { useAuth } from "../../hooks/useAuth";
+import { shouldShowImage } from "../../utils/imageUtils";
 
 const Header = () => {
   const { isAdmin } = useAuth();
@@ -211,7 +212,7 @@ const Header = () => {
                 }}
                 aria-label="Abrir perfil"
               >
-                {userData?.imagemPerfil ? (
+                {shouldShowImage(userData?.imagemPerfil) ? (
                   <img 
                     src={userData.imagemPerfil} 
                     alt="Foto de perfil" 
@@ -225,7 +226,7 @@ const Header = () => {
                 <User 
                   size={24} 
                   strokeWidth={2} 
-                  style={{ display: userData?.imagemPerfil ? 'none' : 'block' }}
+                  style={{ display: shouldShowImage(userData?.imagemPerfil) ? 'none' : 'block' }}
                 />
               </button>
             ) : (
@@ -250,7 +251,7 @@ const Header = () => {
                   onClick={() => setPerfilAberto(!perfilAberto)}
                   aria-label="Abrir perfil"
                 >
-                  {userData?.imagemPerfil ? (
+                  {shouldShowImage(userData?.imagemPerfil) ? (
                     <img 
                       src={userData.imagemPerfil} 
                       alt="Foto de perfil" 
@@ -264,7 +265,7 @@ const Header = () => {
                   <User 
                     size={24} 
                     strokeWidth={2} 
-                    style={{ display: userData?.imagemPerfil ? 'none' : 'block' }}
+                    style={{ display: shouldShowImage(userData?.imagemPerfil) ? 'none' : 'block' }}
                   />
                 </button>
 
@@ -273,7 +274,7 @@ const Header = () => {
                   {/* Informações do Usuário */}
                   <div className="perfil-user-info">
                     <div className="perfil-avatar">
-                      {userData?.imagemPerfil ? (
+                      {shouldShowImage(userData?.imagemPerfil) ? (
                         <img 
                           src={userData.imagemPerfil} 
                           alt="Foto de perfil" 
@@ -286,7 +287,7 @@ const Header = () => {
                       ) : null}
                       <div 
                         className="perfil-avatar-icon"
-                        style={{ display: userData?.imagemPerfil ? 'none' : 'flex' }}
+                        style={{ display: shouldShowImage(userData?.imagemPerfil) ? 'none' : 'flex' }}
                       >
                         <User size={32} strokeWidth={2} />
                       </div>

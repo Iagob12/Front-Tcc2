@@ -7,20 +7,43 @@ import { useAuth } from "../../../hooks/useAuth";
 import { apiGet, apiDelete } from "../../../config/api";
 import defaultImg from "../../../assets/default-imgs/evento-img.png";
 import ModalExclusao from "../../Modais/ModalExclusao";
+import ModalInfoEventos from "../ModalInfoEventos";
 
 export default function SectionEventos() {
   const { isAdmin } = useAuth();
 
   const [eventos, setEventos] = useState([]);
   const [modalExclusaoOpen, setModalExclusaoOpen] = useState(false);
+  const [modalInfoOpen, setModalInfoOpen] = useState(false);
   const [excluirId, setExcluirId] = useState(null);
+  const [eventoDetalhado, setEventoDetalhado] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // Função para buscar os eventos
   const fetchEventos = async () => {
     const response = await apiGet("/evento/listar");
     if (response.ok) {
       const data = await response.json();
       setEventos(data);
+    }
+  };
+
+  // Nova função para buscar detalhes do evento
+  const fetchEventoDetalhes = async (id) => {
+    setLoading(true);
+    try {
+      const response = await apiGet(`/evento/${id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setEventoDetalhado(data);
+        setModalInfoOpen(true);
+      } else {
+        alert("Erro ao buscar detalhes do evento.");
+      }
+    } catch (error) {
+      console.error("Erro ao buscar evento:", error);
+      alert("Erro ao buscar detalhes do evento.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -42,6 +65,15 @@ export default function SectionEventos() {
   const handleDeleteClick = (id) => {
     setExcluirId(id);
     setModalExclusaoOpen(true);
+  };
+
+  const handleSaibaMaisClick = (id) => {
+    fetchEventoDetalhes(id);
+  };
+
+  const handleCloseModalInfo = () => {
+    setModalInfoOpen(false);
+    setEventoDetalhado(null);
   };
 
   useEffect(() => {
@@ -66,6 +98,7 @@ export default function SectionEventos() {
               local={evento.local}
               data={evento.data}
               onDelete={() => handleDeleteClick(evento.id)}
+              onSaibaMais={() => handleSaibaMaisClick(evento.id)}
             />
           ))
         )}
@@ -75,6 +108,13 @@ export default function SectionEventos() {
           </Link>
         )}
       </section>
+
+      <ModalInfoEventos 
+        isOpen={modalInfoOpen}
+        onClose={handleCloseModalInfo}
+        evento={eventoDetalhado}
+        loading={loading}
+      />
 
       <ModalExclusao
         isOpen={modalExclusaoOpen}

@@ -5,7 +5,7 @@ import { useAuth } from "../../../hooks/useAuth";
 import { FaCalendarAlt, FaMapMarkerAlt, FaTrash, FaPen } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const CardEventos = ({ img, titulo, local, data, onDelete, id }) => {
+const CardEventos = ({ img, titulo, local, data, onDelete, onSaibaMais, id }) => {
     const { isAdmin } = useAuth();
     const navigate = useNavigate();
 
@@ -24,11 +24,18 @@ const CardEventos = ({ img, titulo, local, data, onDelete, id }) => {
                 <h2>{titulo}</h2>
                 <div className="dados-evento">
                     <p>
-                        <FaMapMarkerAlt className="endereco" style={{ marginRight: "8px" }} />{local}</p>
+                        <FaMapMarkerAlt className="endereco" style={{ marginRight: "8px" }} />{local}
+                    </p>
                     <p>
                         <FaCalendarAlt className="data" style={{ marginRight: "8px" }} />
-                        {data}</p>
-                    <Button className="btn" text={"Saiba mais"} primary={true} />
+                        {data}
+                    </p>
+                    <Button 
+                        className="btn" 
+                        text={"Saiba mais"} 
+                        primary={true} 
+                        onClick={onSaibaMais}
+                    />
                 </div>
                 {isAdmin && (
                     <div className="opcoes-modificar-evento">

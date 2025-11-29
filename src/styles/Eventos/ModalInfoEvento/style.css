@@ -1,0 +1,82 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    border: none;
+    margin: 0;
+}
+
+.info-evento-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: white;
+    border-radius: 12px;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.loading-container {
+    padding: 40px;
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    grid-column: span 2;
+}
+
+.info-evento-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px 0 0 12px;
+}
+
+.info-evento-dados {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: justify;
+    padding: 20px;
+    gap: 10px;
+}
+
+.info-evento-dados h1 {
+    text-align: center;
+}
+
+.info-evento-container p {
+    font-size: 1.125rem;
+}
+
+.endereco-hora {
+    grid-column: span 2;
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    font-size: 1.25rem;
+    padding: 20px;
+}
+
+.endereco-hora p {
+    display: flex;
+    font-size: 1.125rem;
+    gap: 5px;
+}
+
+.endereco-hora p i {
+    font-size: 1.5rem;
+    color: var(--color-secondary);
+}

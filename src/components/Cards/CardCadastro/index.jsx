@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import "../../../styles/Cards/CardFormulario/style.css";
 import Button from "../../../components/Button";
-import facebook from "../../../assets/CardCadastro/facebook.png";
 import google from "../../../assets/CardCadastro/google.png";
-import apple from "../../../assets/CardCadastro/apple.png";
 import { useNavigate } from "react-router-dom";
 import { ModalVerificarEmail, UseModalVerificarEmail } from "../../Modais/ModalVerificarEmail";
 import { ModalRecuperarSenha, UseModalRecuperarSenha } from "../../Modais/ModalRecuperarSenha";
@@ -221,20 +219,13 @@ const CardCadastro = ({ title, action }) => {
                     )}
 
                     <div className="social-buttons">
-                        <button className="social-btn facebook">
-                            <img src={facebook} alt="Facebook" />
-                        </button>
-
-                        {/* 🔹 Botão Google que redireciona para o backend */}
+                        {/* Botão Google que redireciona para o backend */}
                         <button
                             className="social-btn google"
                             onClick={handleGoogleLogin}
+                            title="Entrar com Google"
                         >
                             <img src={google} alt="Google" />
-                        </button>
-
-                        <button className="social-btn apple">
-                            <img src={apple} alt="Apple" />
                         </button>
                     </div>
                 </div>

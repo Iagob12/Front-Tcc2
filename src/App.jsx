@@ -10,7 +10,7 @@ import Login from "./pages/Login";
 import Tarefas from './pages/Tarefas';
 import TornarVoluntario from "./pages/TornarVoluntario";
 import SerVoluntario from "./components/SerVoluntario";
-import DashboardVoluntario from "./pages/DashboardVoluntario";
+import DashboardVoluntario from "./pages/DashBoardVoluntario";
 import SobreNos from "./pages/SobreNos";
 import Blog from "./pages/Blog";
 import AdicionarNoticia from "./pages/AdicionarNoticia";

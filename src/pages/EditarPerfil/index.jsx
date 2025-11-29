@@ -161,22 +161,36 @@ const EditarPerfil = () => {
     setLoading(true);
 
     try {
-      let fotoPerfilUrl = formData.fotoPerfil;
+      let imagemPerfilUrl = formData.fotoPerfil;
 
-      // Se houver nova imagem, converter para base64
+      // Se houver nova imagem, fazer upload primeiro
       if (imageFile) {
-        const reader = new FileReader();
-        fotoPerfilUrl = await new Promise((resolve, reject) => {
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(imageFile);
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', imageFile);
+
+        const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/upload/image`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: uploadFormData
         });
+
+        if (uploadResponse.ok) {
+          const uploadData = await uploadResponse.json();
+          imagemPerfilUrl = uploadData.url;
+        } else {
+          toast.error("Erro ao fazer upload da imagem.");
+          setLoading(false);
+          return;
+        }
       }
 
       // Preparar dados para enviar
       const dadosPerfil = {
         nome: formData.nome,
-        imagemPerfil: fotoPerfilUrl
+        imagemPerfil: imagemPerfilUrl
       };
 
       // Se for voluntário, adicionar telefone e endereço
@@ -187,11 +201,18 @@ const EditarPerfil = () => {
 
       const responseUsuario = await apiPut("/usuario/editar-perfil", dadosPerfil);
       if (responseUsuario.ok) {
-        // Atualizar dados do usuário no localStorage
-        const user = JSON.parse(localStorage.getItem('user'));
+        // Atualizar dados do usuário no localStorage (user e userData)
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        
+        // Atualizar ambos os objetos
         user.nome = formData.nome;
-        user.imagemPerfil = fotoPerfilUrl;
+        user.imagemPerfil = imagemPerfilUrl;
+        userData.nome = formData.nome;
+        userData.imagemPerfil = imagemPerfilUrl;
+        
         localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('userData', JSON.stringify(userData));
         
         // Atualizar dados do usuário no contexto
         await checkAuth();

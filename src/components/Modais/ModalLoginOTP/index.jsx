@@ -91,7 +91,20 @@ export function ModalLoginOTP({ isOpen, onClose, onSuccess }) {
         const data = await response.json();
         setMessage('Login realizado com sucesso!');
         
-        // Cookie já foi definido pelo backend
+        // Salvar dados do usuário no localStorage
+        const userData = {
+          id: data.id,
+          nome: data.nome,
+          email: data.email,
+          role: data.role,
+          imagemPerfil: data.imagemPerfil
+        };
+        
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('userData', JSON.stringify(userData));
+        localStorage.setItem('userLoggedIn', 'true');
+        
         // Disparar evento para atualizar o Header
         window.dispatchEvent(new Event('loginSuccess'));
         

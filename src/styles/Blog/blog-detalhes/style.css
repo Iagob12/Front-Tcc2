@@ -21,7 +21,7 @@
   font-weight: 600;
   cursor: pointer;
   margin-bottom: 30px;
-  padding: 10px 0;
+  padding: 10px;
   transition: all 0.3s ease;
 }
 
@@ -217,9 +217,8 @@
   margin-bottom: 15px;
 }
 
-.comentario-avatar {
-  width: 45px;
-  height: 45px;
+.comentario-avatar img{
+  width: 60px;
   border-radius: 50%;
   background: var(--color-primary);
   display: flex;

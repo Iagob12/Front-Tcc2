@@ -14,7 +14,7 @@ const BlogDetalhes = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const toast = useToast();
-  
+
   const [blog, setBlog] = useState(null);
   const [comentarios, setComentarios] = useState([]);
   const [novoComentario, setNovoComentario] = useState("");
@@ -82,7 +82,7 @@ const BlogDetalhes = () => {
     if (diffMins < 60) return `${diffMins} min atrás`;
     if (diffHours < 24) return `${diffHours}h atrás`;
     if (diffDays < 7) return `${diffDays}d atrás`;
-    
+
     return data.toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: 'short',
@@ -92,7 +92,7 @@ const BlogDetalhes = () => {
 
   const handleEnviarComentario = async (e) => {
     e.preventDefault();
-    
+
     if (!isAuthenticated) {
       toast.warning("Você precisa estar logado para comentar.");
       navigate("/login");
@@ -159,7 +159,7 @@ const BlogDetalhes = () => {
 
           <article className="blog-detalhes-article">
             <h1 className="blog-detalhes-titulo">{blog.tituloMateria}</h1>
-            
+
             <div className="blog-detalhes-meta">
               <div className="meta-item">
                 <FaCalendarAlt className="meta-icon" />
@@ -169,10 +169,10 @@ const BlogDetalhes = () => {
 
             {blog.urlNoticia && (
               <div className="blog-detalhes-imagem">
-                <img 
+                <img
                   src={
-                    blog.urlNoticia.startsWith('data:') || 
-                    (blog.urlNoticia.length > 100 && /^[A-Za-z0-9+/=]+$/.test(blog.urlNoticia.replace(/\s/g, '')))
+                    blog.urlNoticia.startsWith('data:') ||
+                      (blog.urlNoticia.length > 100 && /^[A-Za-z0-9+/=]+$/.test(blog.urlNoticia.replace(/\s/g, '')))
                       ? (blog.urlNoticia.startsWith('data:') ? blog.urlNoticia : `data:image/jpeg;base64,${blog.urlNoticia}`)
                       : blog.urlNoticia
                   }
@@ -203,8 +203,8 @@ const BlogDetalhes = () => {
                     rows="3"
                     maxLength={500}
                   />
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     className="btn-enviar-comentario"
                     disabled={enviandoComentario || !novoComentario.trim()}
                   >
@@ -229,11 +229,11 @@ const BlogDetalhes = () => {
                   <div key={comentario.id} className="comentario-item">
                     <div className="comentario-header">
                       <div className="comentario-avatar">
-                        <FaUser />
+                        <img src={comentario.imagemPerfilUsuario} alt="Foto de perfil do usuario" />
                       </div>
                       <div className="comentario-info">
                         <span className="comentario-usuario">
-                          {comentario.nomeUsuario || `Usuário #${comentario.idUsuario}`}
+                          {comentario.nomeUsuario}
                         </span>
                         <span className="comentario-data">
                           {formatarDataComentario(comentario.dataComentario)}

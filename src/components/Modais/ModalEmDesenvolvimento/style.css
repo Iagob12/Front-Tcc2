@@ -225,3 +225,8 @@
     height: 70px;
   }
 }
+
+.qrcode{
+  width: 400px;
+  scale: 2.8;
+}

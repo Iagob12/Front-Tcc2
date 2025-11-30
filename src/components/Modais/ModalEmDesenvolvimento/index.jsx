@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.css';
 import { Construction, Heart, CreditCard, Shield } from 'lucide-react';
+import qrcode from "../../../assets/QRCode/qrcode_pix.png"
 
 const ModalEmDesenvolvimento = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
@@ -9,18 +10,15 @@ const ModalEmDesenvolvimento = ({ isOpen, onClose }) => {
     <div className="modal-overlay-dev" onClick={onClose}>
       <div className="modal-content-dev" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header-dev">
-          <div className="modal-icon-dev">
-            <Construction size={52} strokeWidth={2.5} />
-          </div>
-          <h2 className="modal-title-dev">Sistema de Doações em Desenvolvimento</h2>
+          <h2 className="modal-title-dev">Sistema de Doações</h2>
         </div>
 
         <div className="modal-body-dev">
           <p className="modal-text-dev">
-            Estamos trabalhando para trazer a você uma experiência completa e segura de doação!
+            Faça uma doação agora mesmo, via Pix!
           </p>
           
-          <div className="modal-features-dev">
+          {/* <div className="modal-features-dev">
             <div className="feature-item-dev">
               <Heart size={24} className="feature-icon-dev" />
               <span>Doações únicas ou mensais</span>
@@ -37,7 +35,10 @@ const ModalEmDesenvolvimento = ({ isOpen, onClose }) => {
 
           <p className="modal-subtext-dev">
             Enquanto isso, você pode se tornar um voluntário e ajudar de outras formas!
-          </p>
+          </p> */}
+
+          <img className='qrcode' src={qrcode} alt="QRCode para Pix" />
+
         </div>
 
         <div className="modal-footer-dev">

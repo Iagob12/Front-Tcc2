@@ -42,8 +42,8 @@ const ModalEmDesenvolvimento = ({ isOpen, onClose }) => {
         </div>
 
         <div className="modal-footer-dev">
-          <button className="modal-button-dev" onClick={onClose}>
-            Entendi
+          <button className="modal-button-dev modal-close-btn" onClick={onClose}>
+            Fechar
           </button>
         </div>
       </div>

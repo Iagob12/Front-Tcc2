@@ -170,6 +170,11 @@
   box-shadow: 0px 5px 15px rgba(178, 0, 0, 0.3);
 }
 
+.modal-close-btn {
+  position: relative;
+  z-index: 10;
+}
+
 /* Responsivo */
 @media (max-width: 768px) {
   .modal-content-dev {

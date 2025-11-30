@@ -229,7 +229,21 @@ const BlogDetalhes = () => {
                   <div key={comentario.id} className="comentario-item">
                     <div className="comentario-header">
                       <div className="comentario-avatar">
-                        <img src={comentario.imagemPerfilUsuario} alt="Foto de perfil do usuario" />
+                        {comentario.imagemPerfilUsuario ? (
+                          <img 
+                            src={comentario.imagemPerfilUsuario} 
+                            alt={`Foto de ${comentario.nomeUsuario}`}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(comentario.nomeUsuario) + '&background=B20000&color=fff&size=128';
+                            }}
+                          />
+                        ) : (
+                          <img 
+                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(comentario.nomeUsuario)}&background=B20000&color=fff&size=128`}
+                            alt={`Avatar de ${comentario.nomeUsuario}`}
+                          />
+                        )}
                       </div>
                       <div className="comentario-info">
                         <span className="comentario-usuario">

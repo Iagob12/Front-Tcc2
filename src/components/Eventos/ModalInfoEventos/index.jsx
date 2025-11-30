@@ -9,6 +9,9 @@ const ModalInfoEventos = ({ isOpen, onClose, evento, loading }) => {
     return (
         <dialog open className="modal-overlay" onClick={onClose}>
             <div className="info-evento-container" onClick={(e) => e.stopPropagation()}>
+                <button className="modal-close-button" onClick={onClose} aria-label="Fechar">
+                    ×
+                </button>
                 {loading ? (
                     <div className="loading-container">
                         <p>Carregando...</p>

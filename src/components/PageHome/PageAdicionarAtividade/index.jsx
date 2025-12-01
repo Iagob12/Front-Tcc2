@@ -69,14 +69,23 @@ const AdicionarAtividade = () => {
     }
   };
 
-  const handleCropComplete = async (croppedImageBlob) => {
-    if (croppedImageBlob) {
-      const imageUrl = URL.createObjectURL(croppedImageBlob);
-      setImagePreview(imageUrl);
-      setImageFile(croppedImageBlob);
+  const handleCropComplete = (croppedImage) => {
+    try {
+      // Verifica se croppedImage é uma string base64 válida
+      if (!croppedImage || typeof croppedImage !== 'string' || !croppedImage.startsWith('data:image')) {
+        throw new Error('Imagem inválida');
+      }
+      
+      setImagePreview(croppedImage);
+      setImageFile(croppedImage); // Salvar como base64
       setShowCropModal(false);
       setImageToCrop(null);
       toast.success("Imagem ajustada com sucesso!");
+    } catch (error) {
+      console.error('Erro ao processar imagem:', error);
+      toast.error('Erro ao processar a imagem. Tente novamente.');
+      setShowCropModal(false);
+      setImageToCrop(null);
     }
   };
 
@@ -129,14 +138,9 @@ const AdicionarAtividade = () => {
     try {
       let imagemBase64 = null;
 
-      if (imageFile) {
-        const reader = new FileReader();
-        
-        imagemBase64 = await new Promise((resolve, reject) => {
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(imageFile);
-        });
+      // imageFile já é base64 após o crop
+      if (imageFile && typeof imageFile === 'string' && imageFile.startsWith('data:image')) {
+        imagemBase64 = imageFile;
       } else if (imagePreview && typeof imagePreview === 'string' && imagePreview.startsWith('data:image')) {
         // Caso de edição onde já temos base64
         imagemBase64 = imagePreview;

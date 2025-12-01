@@ -1,26 +1,27 @@
 .cardAtiv-container{
     background-color: var(--color-white);
-    padding: 24px;
+    padding: 20px;
     border-radius: 16px;
-    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
     cursor: pointer;
-    height: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     transition: all 0.3s ease;
-    min-width: 180px;
+    width: 200px;
+    min-height: 220px;
+    position: relative;
 }
 
 .cardAtiv-container:hover {
-    transform: translateY(-4px);
-    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-6px);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .cardAtiv-container h3{
     font-weight: 600;
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 16px;
     margin-bottom: 0;
     text-align: center;
@@ -29,79 +30,76 @@
 }
 
 .icon-card-atividade{
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
     border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .opcoes-modificar-aula{
     display: flex;
     width: 100%;
-    justify-content: space-between;
-    font-size: 1.1rem;
-    margin-top: 16px;
-    padding-top: 12px;
+    justify-content: center;
+    gap: 16px;
+    font-size: 1rem;
+    margin-top: 12px;
+    padding-top: 10px;
     border-top: 1px solid var(--color-grey-light);
 }
 
+/* ========================================
+   RESPONSIVIDADE CARD ATIVIDADES
+   ======================================== */
+
 @media (max-width: 768px) {
     .cardAtiv-container {
-        padding: 20px;
+        width: 160px;
+        min-height: 200px;
+        padding: 16px;
         border-radius: 14px;
-        flex-direction: row;
-        justify-content: flex-start;
-        gap: 16px;
-        min-width: auto;
     }
     
     .cardAtiv-container h3 {
-        font-size: 16px;
-        margin-top: 0;
-        text-align: left;
-        flex: 1;
+        font-size: 14px;
+        margin-top: 12px;
     }
     
     .icon-card-atividade {
-        width: 60px;
-        height: 60px;
+        width: 110px;
+        height: 110px;
         border-radius: 10px;
-        flex-shrink: 0;
     }
 
     .opcoes-modificar-aula {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        width: auto;
+        font-size: 0.9rem;
         gap: 12px;
-        margin-top: 0;
-        padding-top: 0;
-        border-top: none;
-        font-size: 1rem;
-    }
-
-    .cardAtiv-container {
-        position: relative;
+        margin-top: 10px;
+        padding-top: 8px;
     }
 }
 
 @media (max-width: 480px) {
     .cardAtiv-container {
-        padding: 16px;
-        gap: 14px;
+        width: 140px;
+        min-height: 180px;
+        padding: 14px;
+        border-radius: 12px;
     }
     
     .cardAtiv-container h3 {
-        font-size: 15px;
+        font-size: 13px;
+        margin-top: 10px;
     }
 
     .icon-card-atividade {
-        width: 50px;
-        height: 50px;
+        width: 90px;
+        height: 90px;
+        border-radius: 8px;
     }
 
     .opcoes-modificar-aula {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        gap: 10px;
     }
 }

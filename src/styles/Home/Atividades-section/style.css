@@ -86,7 +86,7 @@
 /* Tablet */
 @media (max-width: 1024px) {
     .atividades-grid > * {
-        width: 220px;
+        width: 180px;
     }
 }
 
@@ -108,12 +108,12 @@
     }
     
     .atividades-container {
-        flex-direction: column;
         width: 100%;
         margin: 24px 0;
         min-height: auto;
-        gap: 0;
+        gap: 20px;
         padding: 0 16px 50px;
+        justify-content: center;
     }
 
     /* Swiper no mobile */
@@ -124,18 +124,22 @@
 
     .atividades-container .swiper-slide {
         height: auto;
+        width: auto !important;
+        display: flex;
+        justify-content: center;
     }
     
     .atividades-grid {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
         width: 100%;
     }
     
     .atividades-grid > * {
-        width: 100%;
-        max-width: 100%;
+        width: 160px;
+        flex-shrink: 0;
     }
     
     .card {
@@ -167,10 +171,15 @@
     .atividades-container {
         padding: 0 12px 40px;
         margin: 20px 0;
+        gap: 12px;
     }
 
     .atividades-grid {
-        gap: 10px;
+        gap: 12px;
+    }
+
+    .atividades-grid > * {
+        width: 140px;
     }
 
     .sem-atividades {

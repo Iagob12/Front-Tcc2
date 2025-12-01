@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './style.css';
-import { Construction, Heart, CreditCard, Shield } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 import qrcode from "../../../assets/QRCode/qrcode_pix.png"
 
 const ModalEmDesenvolvimento = ({ isOpen, onClose }) => {
+  const [copiado, setCopiado] = useState(false);
+  const pixCode = "00020126330014BR.GOV.BCB.PIX0111478329968465204000053039865802BR5924Thiago Campos de Resende6009SAO PAULO62140510x0SiJfuUAP6304B6F3";
+
   if (!isOpen) return null;
+
+  const copiarPixCode = () => {
+    navigator.clipboard.writeText(pixCode).then(() => {
+      setCopiado(true);
+      setTimeout(() => setCopiado(false), 3000);
+    }).catch(err => {
+      console.error('Erro ao copiar:', err);
+      alert('Erro ao copiar o código PIX');
+    });
+  };
 
   return (
     <div className="modal-overlay-dev" onClick={onClose}>
@@ -18,27 +31,38 @@ const ModalEmDesenvolvimento = ({ isOpen, onClose }) => {
             Faça uma doação agora mesmo, via Pix!
           </p>
           
-          {/* <div className="modal-features-dev">
-            <div className="feature-item-dev">
-              <Heart size={24} className="feature-icon-dev" />
-              <span>Doações únicas ou mensais</span>
-            </div>
-            <div className="feature-item-dev">
-              <CreditCard size={24} className="feature-icon-dev" />
-              <span>Múltiplas formas de pagamento</span>
-            </div>
-            <div className="feature-item-dev">
-              <Shield size={24} className="feature-icon-dev" />
-              <span>Transações 100% seguras</span>
-            </div>
+          <div className="qrcode-container-dev">
+            <img className='qrcode' src={qrcode} alt="QRCode para Pix" />
           </div>
 
-          <p className="modal-subtext-dev">
-            Enquanto isso, você pode se tornar um voluntário e ajudar de outras formas!
-          </p> */}
-
-          <img className='qrcode' src={qrcode} alt="QRCode para Pix" />
-
+          <div className="pix-code-section">
+            <p className="pix-code-label">Ou copie o código PIX:</p>
+            <div className="pix-code-box">
+              <input 
+                type="text" 
+                value={pixCode} 
+                readOnly 
+                className="pix-code-input"
+              />
+              <button 
+                className={`copy-button ${copiado ? 'copied' : ''}`}
+                onClick={copiarPixCode}
+                title={copiado ? "Copiado!" : "Copiar código"}
+              >
+                {copiado ? (
+                  <>
+                    <Check size={18} />
+                    <span>Copiado!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy size={18} />
+                    <span>Copiar</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="modal-footer-dev">

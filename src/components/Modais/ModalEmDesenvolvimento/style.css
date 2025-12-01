@@ -231,7 +231,147 @@
   }
 }
 
-.qrcode{
-  width: 400px;
-  scale: 2.8;
+.qrcode-container-dev {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.qrcode {
+  width: 280px;
+  height: 280px;
+  object-fit: contain;
+}
+
+.pix-code-section {
+  width: 100%;
+  margin-top: 25px;
+}
+
+.pix-code-label {
+  font-size: 0.95rem;
+  color: #495057;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.pix-code-box {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.pix-code-box:hover {
+  border-color: #B20000;
+  box-shadow: 0 2px 8px rgba(178, 0, 0, 0.1);
+}
+
+.pix-code-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 0.85rem;
+  color: #495057;
+  font-family: 'Courier New', monospace;
+  padding: 4px;
+  outline: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copy-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #B20000 0%, #8B0000 100%);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(178, 0, 0, 0.2);
+}
+
+.copy-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(178, 0, 0, 0.3);
+  background: linear-gradient(135deg, #D10000 0%, #A00000 100%);
+}
+
+.copy-button:active {
+  transform: translateY(0);
+}
+
+.copy-button.copied {
+  background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+  box-shadow: 0 2px 6px rgba(40, 167, 69, 0.2);
+}
+
+.copy-button.copied:hover {
+  background: linear-gradient(135deg, #34ce57 0%, #28a745 100%);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.copy-button svg {
+  flex-shrink: 0;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .qrcode {
+    width: 220px;
+    height: 220px;
+  }
+
+  .pix-code-input {
+    font-size: 0.75rem;
+  }
+
+  .copy-button {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+
+  .copy-button span {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .qrcode {
+    width: 200px;
+    height: 200px;
+  }
+
+  .pix-code-box {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pix-code-input {
+    width: 100%;
+    text-align: center;
+  }
+
+  .copy-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .copy-button span {
+    display: inline;
+  }
 }

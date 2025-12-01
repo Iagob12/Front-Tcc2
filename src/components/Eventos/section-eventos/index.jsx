@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Title from "../../Title";
 import CardEventos from "../../Cards/CardEventos";
 import "../../../styles/Eventos/section-eventos/style.css";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
+import { useAutoRefresh } from "../../../hooks/useAutoRefresh";
 import { apiGet, apiDelete } from "../../../config/api";
 import defaultImg from "../../../assets/default-imgs/evento-img.png";
 import ModalExclusao from "../../Modais/ModalExclusao";
@@ -19,13 +20,13 @@ export default function SectionEventos() {
   const [eventoDetalhado, setEventoDetalhado] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchEventos = async () => {
+  const fetchEventos = useCallback(async () => {
     const response = await apiGet("/evento/listar");
     if (response.ok) {
       const data = await response.json();
       setEventos(data);
     }
-  };
+  }, []);
 
   // Nova função para buscar detalhes do evento
   const fetchEventoDetalhes = async (id) => {
@@ -78,7 +79,10 @@ export default function SectionEventos() {
 
   useEffect(() => {
     fetchEventos();
-  }, []);
+  }, [fetchEventos]);
+
+  // Auto-refresh a cada 30 segundos
+  useAutoRefresh(fetchEventos, 30000);
 
   return (
     <>

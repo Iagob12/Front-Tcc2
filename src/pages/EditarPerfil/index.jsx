@@ -212,7 +212,21 @@ const EditarPerfil = () => {
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
       <div className="container-editar-perfil">
         <div className="content-editar-perfil">
-          <h1>Editar Perfil</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
+            <h1>Editar Perfil</h1>
+            {isVoluntario && (
+              <span style={{
+                backgroundColor: '#B20000',
+                color: 'white',
+                padding: '6px 16px',
+                borderRadius: '20px',
+                fontSize: '14px',
+                fontWeight: '600'
+              }}>
+                ✓ Voluntário
+              </span>
+            )}
+          </div>
           
           <form className="form-editar-perfil" onSubmit={handleSubmit}>
 
@@ -276,37 +290,55 @@ const EditarPerfil = () => {
             {/* CAMPOS DE VOLUNTÁRIO */}
             {isVoluntario && (
               <>
-                <div className="form-field">
-                  <label className="label-editar-perfil" htmlFor="telefone">Telefone</label>
-                  <input
-                    type="text"
-                    id="telefone"
-                    value={voluntarioFormData.telefone}
-                    onChange={(e) => setVoluntarioFormData(prev => ({ ...prev, telefone: e.target.value }))}
-                    placeholder="(00) 00000-0000"
-                  />
-                </div>
+                <div style={{
+                  backgroundColor: '#f8f9fa',
+                  padding: '20px',
+                  borderRadius: '10px',
+                  marginBottom: '20px',
+                  border: '2px solid #B20000'
+                }}>
+                  <h3 style={{ 
+                    color: '#B20000', 
+                    marginBottom: '15px',
+                    fontSize: '18px',
+                    fontWeight: '600'
+                  }}>
+                    📋 Informações de Voluntário
+                  </h3>
+                  
+                  <div className="form-field">
+                    <label className="label-editar-perfil" htmlFor="telefone">Telefone</label>
+                    <input
+                      type="text"
+                      id="telefone"
+                      value={voluntarioFormData.telefone}
+                      onChange={(e) => setVoluntarioFormData(prev => ({ ...prev, telefone: e.target.value }))}
+                      placeholder="(00) 00000-0000"
+                    />
+                  </div>
 
-                <div className="form-field">
-                  <label className="label-editar-perfil" htmlFor="endereco">Endereço</label>
-                  <input
-                    type="text"
-                    id="endereco"
-                    value={voluntarioFormData.endereco}
-                    onChange={(e) => setVoluntarioFormData(prev => ({ ...prev, endereco: e.target.value }))}
-                    placeholder="Digite seu endereço completo"
-                  />
-                </div>
+                  <div className="form-field">
+                    <label className="label-editar-perfil" htmlFor="endereco">Endereço</label>
+                    <input
+                      type="text"
+                      id="endereco"
+                      value={voluntarioFormData.endereco}
+                      onChange={(e) => setVoluntarioFormData(prev => ({ ...prev, endereco: e.target.value }))}
+                      placeholder="Digite seu endereço completo"
+                    />
+                  </div>
 
-                <div className="form-field">
-                  <label className="label-editar-perfil" htmlFor="descricao">Por que quer ser voluntário?</label>
-                  <textarea
-                    id="descricao"
-                    value={voluntarioFormData.descricao}
-                    onChange={(e) => setVoluntarioFormData(prev => ({ ...prev, descricao: e.target.value }))}
-                    placeholder="Descreva sua motivação para ser voluntário"
-                    rows="4"
-                  />
+                  <div className="form-field">
+                    <label className="label-editar-perfil" htmlFor="descricao">Por que quer ser voluntário?</label>
+                    <textarea
+                      id="descricao"
+                      value={voluntarioFormData.descricao}
+                      onChange={(e) => setVoluntarioFormData(prev => ({ ...prev, descricao: e.target.value }))}
+                      placeholder="Descreva sua motivação para ser voluntário"
+                      rows="4"
+                      style={{ resize: 'vertical' }}
+                    />
+                  </div>
                 </div>
               </>
             )}

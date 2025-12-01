@@ -4,13 +4,14 @@ import Title from "../../Title";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import 'swiper/css';
 import 'swiper/css/pagination';
 import ModalAtividades from "../../Modais/ModalAtividades";
 import ModalAtividadeInscricao from "../../Modais/ModalAtividadesInscricao";
 import { UseModalAtividades } from "../../Modais/ModalAtividades/UseModalAtividades.jsx";
 import { useAuth } from "../../../hooks/useAuth";
+import { useAutoRefresh } from "../../../hooks/useAutoRefresh";
 import defaultImg from "../../../assets/default-imgs/default-atividade.png";
 import { apiGet, apiDelete } from "../../../config/api";
 import ModalExclusao from "../../Modais/ModalExclusao";
@@ -26,33 +27,36 @@ const AtividadeSection = () => {
   const [excluirId, setExcluirId] = useState(null);
   const swiperRef = useRef(null);
 
-  useEffect(() => {
-    const fetchAtividades = async () => {
-      try {
-        const response = await apiGet("/curso/listar");
-        if (response.ok) {
-          const dados = await response.json();
+  const fetchAtividades = useCallback(async () => {
+    try {
+      const response = await apiGet("/curso/listar");
+      if (response.ok) {
+        const dados = await response.json();
 
-          const atividadesFormatadas = dados.map((item) => ({
-            id: item.id,
-            name: item.titulo,
-            image: item.imagem || defaultImg,
-            descricao: item.descricao,
-            data: item.dias,
-            horario: item.horario,
-            vagas: item.vagas,
-          }));
-          setAtividades(atividadesFormatadas);
-        } else {
-          console.error("Erro ao listar atividades:", response.status);
-        }
-      } catch (error) {
-        console.error("Erro ao conectar com a API:", error);
+        const atividadesFormatadas = dados.map((item) => ({
+          id: item.id,
+          name: item.titulo,
+          image: item.imagem || defaultImg,
+          descricao: item.descricao,
+          data: item.dias,
+          horario: item.horario,
+          vagas: item.vagas,
+        }));
+        setAtividades(atividadesFormatadas);
+      } else {
+        console.error("Erro ao listar atividades:", response.status);
       }
-    };
-
-    fetchAtividades();
+    } catch (error) {
+      console.error("Erro ao conectar com a API:", error);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchAtividades();
+  }, [fetchAtividades]);
+
+  // Auto-refresh a cada 30 segundos
+  useAutoRefresh(fetchAtividades, 30000);
 
   const usarSwiper = atividades.length >= 5;
 

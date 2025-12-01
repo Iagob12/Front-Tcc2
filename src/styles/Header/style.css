@@ -363,10 +363,24 @@ a.drop-item:hover{
 }
 
 .perfil-badge-dot {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background-color: var(--color-primary);
+    transition: background-color 0.3s ease;
+}
+
+/* Cores específicas para cada tipo de usuário */
+.perfil-badge-dot.admin {
+    background-color: #28a745; /* Verde para Admin */
+}
+
+.perfil-badge-dot.voluntario {
+    background-color: #28a745; /* Verde para Voluntário */
+}
+
+.perfil-badge-dot.usuario {
+    background-color: #dc3545; /* Vermelho para Usuário comum */
 }
 
 .perfil-badge-text {

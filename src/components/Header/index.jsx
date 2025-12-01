@@ -300,8 +300,16 @@ const Header = () => {
 
                   {/* Badge */}
                   <div className="perfil-badge">
-                    <div className="perfil-badge-dot"></div>
-                    <span className="perfil-badge-text">{userData?.role || 'Usuario'}</span>
+                    <div className={`perfil-badge-dot ${
+                      userData?.role === 'ADMIN' ? 'admin' : 
+                      userData?.isVoluntario ? 'voluntario' : 
+                      'usuario'
+                    }`}></div>
+                    <span className="perfil-badge-text">
+                      {userData?.role === 'ADMIN' ? 'Admin' : 
+                       userData?.isVoluntario ? 'Voluntário' : 
+                       'Usuário'}
+                    </span>
                   </div>
 
                   {/* Divisor */}

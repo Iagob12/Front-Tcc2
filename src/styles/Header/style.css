@@ -220,6 +220,20 @@ a.drop-item:hover{
     margin-top: 20px;
 }
 
+/* Item do App no menu - oculto no desktop */
+.menu-item-app-mobile {
+    display: none;
+}
+
+/* Classes para mostrar/esconder elementos no desktop/mobile */
+.mobile-only {
+    display: none;
+}
+
+.desktop-only {
+    display: block;
+}
+
 /* Botão de ícone de perfil */
 .profile-icon-btn {
     background-color: transparent;
@@ -592,6 +606,7 @@ a.drop-item:hover{
         justify-content: space-between;
         width: 100%;
         padding: 0;
+        background: transparent;
     }
     
     .sobre-nos-header a {
@@ -599,19 +614,23 @@ a.drop-item:hover{
         padding: 18px 24px;
         font-size: 16px;
         font-weight: 500;
+        color: var(--color-black);
     }
     
     .dropdown-toggle {
-        padding: 8px 12px;
-        font-size: 20px;
+        padding: 18px 20px;
+        font-size: 18px;
         color: var(--color-secondary);
         transition: transform 0.3s ease;
+        background: transparent;
+        border: none;
+        cursor: pointer;
     }
 
     .sobre-dropdown {
         position: static;
         width: 100%;
-        background: rgba(178, 0, 0, 0.03);
+        background: rgba(178, 0, 0, 0.05);
         padding: 0;
         margin: 0;
         border-radius: 0;
@@ -624,6 +643,7 @@ a.drop-item:hover{
         opacity: 1;
         visibility: visible;
         max-height: 400px;
+        padding: 8px 0;
     }
 
     .sobre-dropdown.inativo {
@@ -631,10 +651,11 @@ a.drop-item:hover{
         visibility: hidden;
         max-height: 0;
         overflow: hidden;
+        padding: 0;
     }
 
     .sobre-dropdown ul {
-        padding: 8px 0;
+        padding: 0;
     }
 
     .sobre-dropdown li {
@@ -655,22 +676,50 @@ a.drop-item:hover{
         position: absolute;
         left: 32px;
         color: var(--color-secondary);
-        font-size: 20px;
-        transition: transform 0.2s ease;
+        font-size: 18px;
+        line-height: 1;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
-    .sobre-dropdown li:hover a {
-        background-color: rgba(178, 0, 0, 0.08);
-        padding-left: 52px;
-    }
-
-    .sobre-dropdown li:hover a::before {
-        transform: translateX(4px);
+    .sobre-dropdown li:active a {
+        background-color: rgba(178, 0, 0, 0.1);
     }
 
     /* Mostra botões no menu mobile */
     .mobile-menu-buttons {
         display: flex;
+    }
+
+    /* Item do App no menu mobile - visível */
+    .menu-item-app-mobile {
+        display: block;
+        border-bottom: 1px solid var(--color-grey-light);
+    }
+
+    /* No mobile: esconde desktop-only, mostra mobile-only */
+    .desktop-only {
+        display: none !important;
+    }
+
+    .mobile-only {
+        display: block;
+    }
+
+    .menu-item-app-mobile a {
+        display: flex;
+        align-items: center;
+        padding: 18px 24px;
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--color-black);
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .menu-item-app-mobile a:hover {
+        background-color: var(--color-grey-light);
+        color: var(--color-secondary);
     }
 
     /* Esconde botões desktop */

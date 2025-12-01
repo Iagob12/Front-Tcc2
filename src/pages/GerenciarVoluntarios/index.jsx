@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import MobileWarning from '../../components/MobileWarning';
 import { apiGet, apiPut } from '../../config/api';
 import { useToast } from '../../components/Toast/useToast';
 import ToastContainer from '../../components/Toast/ToastContainer';
@@ -89,6 +90,7 @@ const GerenciarVoluntarios = () => {
   return (
     <>
       <Header />
+      <MobileWarning pageName="Gerenciar Voluntários" />
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
       
       <div className="container-gerenciar-voluntarios">

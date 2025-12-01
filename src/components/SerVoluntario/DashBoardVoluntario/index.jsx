@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../../../components/Header";
+import Footer from "../../../components/Footer";
 import "../../../styles/TornarVoluntario/DashBoardVoluntario/style.css";
 import { apiGet } from "../../../config/api";
 import { FaEnvelope, FaCheckCircle } from "react-icons/fa";
@@ -107,6 +108,7 @@ const DashboardVoluntario = () => {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 };

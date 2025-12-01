@@ -7,6 +7,7 @@ import Title from "../../components/Title"
 import SectionDoe from "../../components/ComoAjudar/section-doe-agora"
 import SectionPlanos from "../../components/ComoAjudar/section-planos"
 import Footer from "../../components/Footer"
+import AppPromoBanner from "../../components/AppPromoBanner"
 
 export default function ComoAjudar() {
     const location = useLocation();
@@ -34,6 +35,7 @@ export default function ComoAjudar() {
             <SectionDoe />
             <SectionPlanos />
             <Footer />
+            <AppPromoBanner />
         </>
     )
 }

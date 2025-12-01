@@ -38,6 +38,14 @@ const ImageCropModal = ({ image, onClose, onCropComplete }) => {
     setRotation((prev) => (prev + 90) % 360);
   };
 
+  const handleZoomIn = () => {
+    setZoom((prev) => Math.min(prev + 0.1, 3));
+  };
+
+  const handleZoomOut = () => {
+    setZoom((prev) => Math.max(prev - 0.1, 0.5));
+  };
+
   return (
     <div className="crop-modal-overlay">
       <div className="crop-modal-container">
@@ -58,25 +66,28 @@ const ImageCropModal = ({ image, onClose, onCropComplete }) => {
             onCropChange={onCropChange}
             onZoomChange={onZoomChange}
             onCropComplete={onCropCompleteHandler}
+            restrictPosition={false}
           />
         </div>
 
         <div className="crop-controls">
           <div className="control-group">
-            <label>
+            <button className="zoom-btn" onClick={handleZoomOut}>
               <ZoomOut size={20} />
-              Zoom
-              <ZoomIn size={20} />
-            </label>
+            </button>
+            <label>Zoom</label>
             <input
               type="range"
-              min={1}
+              min={0.5}
               max={3}
               step={0.1}
               value={zoom}
               onChange={(e) => setZoom(Number(e.target.value))}
               className="zoom-slider"
             />
+            <button className="zoom-btn" onClick={handleZoomIn}>
+              <ZoomIn size={20} />
+            </button>
           </div>
 
           <button className="rotate-btn" onClick={handleRotate}>

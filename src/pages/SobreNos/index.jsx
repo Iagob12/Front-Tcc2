@@ -5,6 +5,7 @@ import Main from "../../components/Main/";
 import SectionLinhaTempo from "../../components/SobreNos/section-linha-tempo";
 import SectionPilares from "../../components/SobreNos/section-pilares";
 import SectionEquipe from "../../components/SobreNos/section-equipe";
+import AppPromoBanner from "../../components/AppPromoBanner";
 import img_sobreNos from "../../assets/SobreNos/sobreNos.png"
 import SectionHistoria from "../../components/SobreNos/section-historia";
 
@@ -22,6 +23,7 @@ useSmoothScroll();
             <SectionPilares id="projetos"/>
             <SectionEquipe id="equipe"/>
             <Footer />
+            <AppPromoBanner />
         </>
     )
 };

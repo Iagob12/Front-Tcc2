@@ -130,7 +130,7 @@
         z-index: 2;
         width: 100%;
         min-height: 100vh;
-        padding: 90px 20px 40px;
+        padding: 100px 20px 40px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -143,6 +143,7 @@
         padding: 36px 32px;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
         border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 40px;
     }
 
     .card-formulario h1 {
@@ -193,12 +194,13 @@
 
 @media (max-width: 480px) {
     .background-card {
-        padding: 80px 16px 32px;
+        padding: 90px 16px 32px;
     }
 
     .card-formulario {
         max-width: 100%;
         padding: 32px 24px;
+        margin-bottom: 32px;
     }
 
     .card-formulario h1 {

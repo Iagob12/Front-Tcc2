@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/PageSistemaAprovacao/style.css";
 import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import MobileWarning from "../MobileWarning";
 import CardBlog from "../../components/Cards/SistemaAprovacaoCards/AprovarBlog";
 import CardVoluntario from "../../components/Cards/SistemaAprovacaoCards/AprovarVoluntario";
 import { apiGet, apiPut, apiDelete } from "../../config/api";
@@ -187,6 +189,7 @@ const SistemaAprovacao = () => {
   return (
     <>
       <Header />
+      <MobileWarning pageName="Sistema de Aprovação" />
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
       <div className="container-sistema-aprovacao">
         <section className="dashboard-sistema">
@@ -341,6 +344,7 @@ const SistemaAprovacao = () => {
           </section>
         </section>
       </div>
+      <Footer />
     </>
   );
 };

@@ -128,6 +128,13 @@ const ModalAtividades = ({ aula, data, horario, descricao, isOpen, onClose, posi
     zIndex: 1501,
   };
 
+  // Função para truncar texto longo
+  const truncateText = (text, maxLength = 150) => {
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  };
+
   return (
     <div 
       ref={modalRef} 
@@ -136,9 +143,9 @@ const ModalAtividades = ({ aula, data, horario, descricao, isOpen, onClose, posi
       onMouseLeave={!isMobile ? onClose : undefined}
     >
       <h3>{aula}</h3>
-      <p>{data}</p>
-      <p>{descricao}</p>
-      <p>{horario}</p>
+      <p className="modal-data">{data}</p>
+      <p className="modal-descricao">{truncateText(descricao)}</p>
+      <p className="modal-horario">{horario}</p>
       <Button text="Inscrever-se" onClick={onInscrever} />
     </div>
   );

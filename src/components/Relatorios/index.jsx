@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Header from "../Header";
+import Footer from "../Footer";
+import MobileWarning from "../MobileWarning";
 import "../../styles/PageRelatorios/style.css";
 import { FaDownload } from "react-icons/fa";
 import { apiGet, createApiUrl } from "../../config/api";
@@ -40,6 +42,7 @@ const Relatorios = () => {
     return (
         <>
             <Header />
+            <MobileWarning pageName="Relatórios" />
             <div className="container-relatorios">
                 <section className="content-container-relatorios">
                     <div className="cabecalho-relatorios">
@@ -71,6 +74,7 @@ const Relatorios = () => {
                     )}
                 </section>
             </div>
+            <Footer />
         </>
     );
 };

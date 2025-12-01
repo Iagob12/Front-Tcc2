@@ -20,7 +20,12 @@
     .formulario-container {
         position: relative;
         flex-direction: column;
-        overflow: hidden;
+        min-height: 100vh;
+        background: linear-gradient(
+            to bottom,
+            rgba(143, 1, 1, 0.6) 0%,
+            rgba(143, 1, 1, 0.5) 100%
+        );
     }
 }
 

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import "../../styles/GerenciarInscricoes/style.css";
 import Header from "../Header";
+import Footer from "../Footer";
+import MobileWarning from "../MobileWarning";
 import { apiGet, apiDelete } from "../../config/api";
 import { useToast } from '../Toast/useToast';
 import ToastContainer from '../Toast/ToastContainer';
@@ -166,6 +168,7 @@ const GerenciarInscricoes = () => {
   return (
     <>
       <Header />
+      <MobileWarning pageName="Gerenciar Inscrições" />
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
       <div className="container-gerenciar-inscricoes">
         <section className="dashboard-inscricoes">
@@ -432,6 +435,7 @@ const GerenciarInscricoes = () => {
           </div>
         </section>
       </div>
+      <Footer />
     </>
   );
 };

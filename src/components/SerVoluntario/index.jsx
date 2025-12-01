@@ -1,6 +1,7 @@
 import "../../styles/TornarVoluntario/SerVoluntario/style.css";
 import Button from "../Button";
 import Header from "../Header";
+import Footer from "../Footer";
 import { useState, useEffect } from "react";
 import { apiPost, apiGet } from "../../config/api";
 import { useNavigate } from "react-router-dom";
@@ -288,6 +289,7 @@ const SerVoluntario = () => {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 };

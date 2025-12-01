@@ -74,8 +74,9 @@
 .control-group {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
 }
 
 .control-group label {
@@ -85,6 +86,31 @@
   font-size: 14px;
   font-weight: 600;
   color: #666;
+  min-width: 50px;
+}
+
+.zoom-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: #fff;
+  border: 2px solid #e5e5e5;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.zoom-btn:hover {
+  border-color: #b91c1c;
+  color: #b91c1c;
+  transform: scale(1.1);
+}
+
+.zoom-btn:active {
+  transform: scale(0.95);
 }
 
 .zoom-slider {

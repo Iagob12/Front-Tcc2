@@ -4,7 +4,7 @@ import Logo from "../../assets/Logos/Logo.svg";
 import Button from "../Button";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { apiGet, apiPost } from '../../config/api';
-import { User, X, Menu } from 'lucide-react';
+import { User, X, Menu, Smartphone } from 'lucide-react';
 import { useAuth } from "../../hooks/useAuth";
 import { shouldShowImage } from "../../utils/imageUtils";
 
@@ -167,8 +167,9 @@ const Header = () => {
               <Link to="/eventos" onClick={() => setMobileMenuAberto(false)}>Eventos</Link>
             </li>
 
+            {/* Sobre Nós - Desktop com dropdown, Mobile sem dropdown */}
             <li
-              className={`menu-item-com-dropdown ${location.pathname === '/sobre' ? 'active' : ''}`}
+              className={`menu-item-com-dropdown desktop-only ${location.pathname === '/sobre' ? 'active' : ''}`}
               onMouseEnter={() => setAberto(true)}
               onMouseLeave={() => setAberto(false)}
             >
@@ -196,11 +197,28 @@ const Header = () => {
                 </ul>
               </div>
             </li>
+            
+            {/* Sobre Nós - Mobile simples (sem dropdown) */}
+            <li className={`mobile-only ${location.pathname === '/sobre' ? 'active' : ''}`}>
+              <Link to="/sobre" onClick={() => setMobileMenuAberto(false)}>Sobre Nós</Link>
+            </li>
             <li className={location.pathname === '/blog' ? 'active' : ''}>
               <Link to="/blog" onClick={() => setMobileMenuAberto(false)}>Blog</Link>
             </li>
             <li className={location.pathname === '/como-ajudar' ? 'active' : ''}>
               <Link to="/como-ajudar" onClick={() => setMobileMenuAberto(false)}>Como Ajudar</Link>
+            </li>
+            
+            {/* Link do App - apenas visível no mobile */}
+            <li className="menu-item-app-mobile">
+              <a 
+                href="https://expo.dev/artifacts/eas/5RAxAaWjAWsKWxDCVDu6V9.apk" 
+                onClick={() => setMobileMenuAberto(false)}
+                download
+              >
+                <Smartphone size={16} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+                Nosso App
+              </a>
             </li>
           </ul>
 

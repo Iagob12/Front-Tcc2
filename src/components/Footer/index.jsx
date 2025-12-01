@@ -3,10 +3,12 @@ import LogoFooter from "../../assets/Footer/Logo-footer.svg";
 import Instagram from "../../assets/Footer/logo-instagram.svg";
 import Facebook from "../../assets/Footer/logo-facebook.svg";
 import WhatsApp from "../../assets/Footer/logo-whatsapp.svg";
+import { Smartphone } from "lucide-react";
 import { Link, useNavigate } from 'react-router-dom';
 
 import { UseModal, Modal, ModalContent, TermosContent, PrivacidadeContent } from '../Modais/ModalTermos';
 import { UseModalContato, ModalContato } from '../Modais/ModalContato';
+import { isMobileDevice } from '../../utils/deviceDetection';
 
 
 const Footer = () => {
@@ -14,6 +16,8 @@ const Footer = () => {
   const modalContato = UseModalContato();
   const modalTermos = UseModal();
   const modalPrivacidade = UseModal();
+  const isMobile = isMobileDevice();
+  const appDownloadLink = 'https://expo.dev/artifacts/eas/5RAxAaWjAWsKWxDCVDu6V9.apk';
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -217,6 +221,37 @@ const Footer = () => {
                   />
                 </Modal>
               </nav>
+            </div>
+          </div>
+
+          {/* Seção do App - Estilo igual aos outros containers */}
+          <div className="footer-container footer-app-section">
+            <h3>
+              <Smartphone size={24} className="footer-app-icon" />
+              Nosso App
+            </h3>
+            <div className="footer-app-content">
+              {isMobile ? (
+                <a 
+                  href={appDownloadLink} 
+                  className="footer-item"
+                  download
+                >
+                  Baixar Aplicativo
+                </a>
+              ) : (
+                <>
+                  <p className="footer-item" style={{ cursor: 'default', marginBottom: '10px' }}>
+                    Escaneie para baixar
+                  </p>
+                  <div className="footer-qrcode">
+                    <img 
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(appDownloadLink)}&bgcolor=ffffff`}
+                      alt="QR Code para download do app"
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

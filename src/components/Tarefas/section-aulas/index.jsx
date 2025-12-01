@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import CardAula from "../../Cards/CardAulas";
 import defaultImg from "../../../assets/default-imgs/default-atividade.png";
 import "../../../styles/Tarefa/section-aulas/style.css";
@@ -42,20 +43,29 @@ export default function SectionAulas() {
     }
 
     return (
-        <section className="lista-aulas">
-            {aulas.map((curso) => (
-                <CardAula
-                    key={curso.idInscricao}
-                    idInscricao={curso.idInscricao}
-                    titulo={curso.titulo}
-                    descricao={curso.descricao}
-                    data={curso.dias}
-                    img={curso.imagem || defaultImg}
-                    onCancel={(cancelledId) =>
-                        setAulas(aulas.filter((a) => a.idInscricao !== cancelledId))
-                    }
-                />
-            ))}
-        </section>
+        <div className="lista-aulas-container">
+            <section className="lista-aulas">
+                {aulas.map((curso) => (
+                    <CardAula
+                        key={curso.idInscricao}
+                        idInscricao={curso.idInscricao}
+                        titulo={curso.titulo}
+                        descricao={curso.descricao}
+                        data={curso.dias}
+                        img={curso.imagem || defaultImg}
+                        onCancel={(cancelledId) =>
+                            setAulas(aulas.filter((a) => a.idInscricao !== cancelledId))
+                        }
+                    />
+                ))}
+            </section>
+            {aulas.length > 1 && (
+                <div className="scroll-indicator">
+                    <FaChevronLeft />
+                    <span>Arraste para ver mais</span>
+                    <FaChevronRight />
+                </div>
+            )}
+        </div>
     );
 }

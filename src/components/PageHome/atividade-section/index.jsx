@@ -58,8 +58,6 @@ const AtividadeSection = () => {
   // Auto-refresh a cada 30 segundos
   useAutoRefresh(fetchAtividades, 30000);
 
-  const usarSwiper = atividades.length >= 5;
-
   const handleCardClick = (atividade, event) => {
     event?.stopPropagation();
     const rect = event.currentTarget.getBoundingClientRect();
@@ -115,25 +113,21 @@ const AtividadeSection = () => {
             <div className="sem-atividades">
               <p>Sem atividades disponíveis no momento!</p>
             </div>
-          ) : usarSwiper ? (
+          ) : (
             <Swiper
               ref={swiperRef}
               modules={[Pagination]}
-              slidesPerView={1.2}
-              centeredSlides={true}
-              spaceBetween={16}
-              pagination={{ clickable: true, dynamicBullets: true }}
+              slidesPerView="auto"
+              spaceBetween={20}
+              pagination={{ clickable: true }}
               allowTouchMove={true}
+              grabCursor={true}
               preventClicks={false}
               preventClicksPropagation={false}
-              breakpoints={{
-                480: { slidesPerView: 2, centeredSlides: false, spaceBetween: 20 },
-                768: { slidesPerView: 3, centeredSlides: false, spaceBetween: 20 },
-                1024: { slidesPerView: 4, centeredSlides: false, spaceBetween: 20 }
-              }}
+              className="atividades-swiper"
             >
               {atividades.map((atividade) => (
-                <SwiperSlide key={atividade.id}>
+                <SwiperSlide key={atividade.id} className="atividade-slide">
                   <CardAtividades
                     id={atividade.id}
                     image={atividade.image}
@@ -144,22 +138,6 @@ const AtividadeSection = () => {
                 </SwiperSlide>
               ))}
             </Swiper>
-          ) : (
-            <div className="atividades-grid">
-              {atividades.map((atividade) => (
-                <CardAtividades
-                  key={atividade.id}
-                  id={atividade.id}
-                  image={atividade.image}
-                  name={atividade.name}
-                  data={atividade.data}
-                  descricao={atividade.descricao}
-                  horario={atividade.horario}
-                  onClick={(event) => handleCardClick(atividade, event)}
-                  onDelete={() => handleDeleteClick(atividade.id)}
-                />
-              ))}
-            </div>
           )}
         </div>
 

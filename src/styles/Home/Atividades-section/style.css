@@ -24,36 +24,37 @@
 
 .atividades-container {
     display: flex;
+    justify-content: center;
     align-self: center;
-    margin: 50px auto;
-    width: 85%;
-    max-width: 1200px;
-    gap: 50px;
-    min-height: 338px;
+    margin: 40px auto;
+    width: 90%;
+    max-width: 900px;
+    gap: 24px;
+    min-height: auto;
     overflow: visible;
     position: relative;
-    padding-bottom: 60px;
+    padding-bottom: 40px;
 }
 
 .sem-atividades{
-    height: 300px;
+    height: 200px;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2rem;
+    font-size: 1.5rem;
+    color: var(--color-grey);
 }
 
 .atividades-grid {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 24px;
     width: 100%;
     flex-wrap: wrap;
 }
 
 .atividades-grid > * {
-    width: 200px;
     flex-shrink: 0;
 }
 
@@ -85,15 +86,19 @@
 
 /* Tablet */
 @media (max-width: 1024px) {
-    .atividades-grid > * {
-        width: 180px;
+    .atividades-container {
+        gap: 20px;
+    }
+    
+    .atividades-grid {
+        gap: 20px;
     }
 }
 
 /* Mobile */
 @media (max-width: 768px) {
     .atividades {
-        padding: 40px 0 60px;
+        padding: 40px 0 50px;
         overflow: hidden;
     }
     
@@ -110,10 +115,8 @@
     .atividades-container {
         width: 100%;
         margin: 24px 0;
-        min-height: auto;
-        gap: 20px;
-        padding: 0 16px 50px;
-        justify-content: center;
+        gap: 16px;
+        padding: 0 16px 40px;
     }
 
     /* Swiper no mobile */
@@ -130,34 +133,19 @@
     }
     
     .atividades-grid {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
         gap: 16px;
-        width: 100%;
-    }
-    
-    .atividades-grid > * {
-        width: 160px;
-        flex-shrink: 0;
-    }
-    
-    .card {
-        width: 100%;
-        height: auto;
     }
 
     .sem-atividades {
-        height: 200px;
-        font-size: 1.2rem;
-        padding: 20px;
+        height: 150px;
+        font-size: 1.1rem;
     }
 }
 
 /* Mobile pequeno */
 @media (max-width: 480px) {
     .atividades {
-        padding: 32px 0 50px;
+        padding: 32px 0 40px;
     }
     
     .atividades h1 {
@@ -169,17 +157,13 @@
     }
     
     .atividades-container {
-        padding: 0 12px 40px;
+        padding: 0 12px 30px;
         margin: 20px 0;
         gap: 12px;
     }
 
     .atividades-grid {
         gap: 12px;
-    }
-
-    .atividades-grid > * {
-        width: 140px;
     }
 
     .sem-atividades {

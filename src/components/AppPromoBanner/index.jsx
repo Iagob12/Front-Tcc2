@@ -3,36 +3,55 @@ import { X, Smartphone } from 'lucide-react';
 import { isMobileDevice } from '../../utils/deviceDetection';
 import './style.css';
 
+const FIVE_MINUTES = 5 * 60 * 1000; // 5 minutos em milissegundos
+
 const AppPromoBanner = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  const checkAndShowBanner = () => {
+    const lastClosed = localStorage.getItem('appPromoBannerLastClosed');
+    const now = Date.now();
+    
+    // Se nunca fechou ou já passou 5 minutos desde o último fechamento
+    if (!lastClosed || (now - parseInt(lastClosed)) >= FIVE_MINUTES) {
+      setIsVisible(true);
+    }
+  };
 
   useEffect(() => {
     const mobile = isMobileDevice();
     setIsMobile(mobile);
     
-    // Verifica se o banner já foi fechado nesta sessão
-    const bannerClosed = sessionStorage.getItem('appPromoBannerClosed');
-    
-    if (mobile && !bannerClosed) {
-      // Mostra o banner após 2 segundos
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-      }, 2000);
+    if (!mobile) return;
 
-      return () => clearTimeout(timer);
-    }
+    // Mostra o banner após 2 segundos
+    const initialTimer = setTimeout(() => {
+      checkAndShowBanner();
+    }, 2000);
+
+    // Verifica a cada 5 minutos se deve mostrar novamente
+    const intervalTimer = setInterval(() => {
+      checkAndShowBanner();
+    }, FIVE_MINUTES);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(intervalTimer);
+    };
   }, []);
 
   const handleClose = () => {
     setIsVisible(false);
-    sessionStorage.setItem('appPromoBannerClosed', 'true');
+    // Salva o timestamp de quando foi fechado
+    localStorage.setItem('appPromoBannerLastClosed', Date.now().toString());
   };
 
   const handleDownload = () => {
     window.location.href = 'https://expo.dev/artifacts/eas/5RAxAaWjAWsKWxDCVDu6V9.apk';
   };
 
+  // Só mostra em dispositivos móveis
   if (!isVisible || !isMobile) return null;
 
   return (

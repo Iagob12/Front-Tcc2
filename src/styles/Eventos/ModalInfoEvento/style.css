@@ -147,17 +147,108 @@
 }
 
 @media (max-width: 720px) {
+    .modal-overlay {
+        padding: 16px;
+        align-items: flex-start;
+        padding-top: 60px;
+    }
+
     .info-evento-container {
         grid-template-columns: 1fr;
+        width: 100%;
+        max-width: 100%;
+        max-height: calc(100vh - 80px);
+        border-radius: 16px;
+        margin: 0;
     }
 
     .info-evento-container img {
-        border-radius: 18px 18px 0 0;
-        height: 250px;
+        border-radius: 16px 16px 0 0;
+        height: 200px;
+        min-height: 200px;
+    }
+
+    .info-evento-dados {
+        padding: 20px;
+        gap: 12px;
+    }
+
+    .info-evento-dados h1 {
+        font-size: 1.4rem;
+    }
+
+    .info-evento-container p {
+        font-size: 0.95rem;
+        line-height: 1.5;
     }
 
     .endereco-hora {
         flex-direction: column;
-        gap: 18px;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 0 0 16px 16px;
+    }
+
+    .endereco-hora p {
+        font-size: 0.9rem;
+        justify-content: center;
+    }
+
+    .endereco-hora p i {
+        font-size: 1.1rem;
+    }
+
+    .modal-close-button {
+        top: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+        font-size: 24px;
+    }
+
+    .loading-container {
+        grid-column: 1;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-overlay {
+        padding: 12px;
+        padding-top: 50px;
+    }
+
+    .info-evento-container {
+        max-height: calc(100vh - 70px);
+        border-radius: 14px;
+    }
+
+    .info-evento-container img {
+        height: 180px;
+        min-height: 180px;
+        border-radius: 14px 14px 0 0;
+    }
+
+    .info-evento-dados {
+        padding: 16px;
+        gap: 10px;
+    }
+
+    .info-evento-dados h1 {
+        font-size: 1.2rem;
+    }
+
+    .info-evento-container p {
+        font-size: 0.9rem;
+    }
+
+    .endereco-hora {
+        gap: 10px;
+        padding: 14px;
+        border-radius: 0 0 14px 14px;
+    }
+
+    .endereco-hora p {
+        font-size: 0.85rem;
     }
 }

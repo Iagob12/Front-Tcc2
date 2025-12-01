@@ -56,37 +56,21 @@ const AdicionarEvento = () => {
   const handleCropComplete = async (croppedImage) => {
     setShowCropModal(false);
     setImageToCrop(null);
-    setImagePreview(croppedImage);
-    setLoading(true);
-
+    
     try {
-      // Verifica se croppedImage é uma string válida
-      if (!croppedImage || typeof croppedImage !== 'string') {
+      // Verifica se croppedImage é uma string base64 válida
+      if (!croppedImage || typeof croppedImage !== 'string' || !croppedImage.startsWith('data:image')) {
         throw new Error('Imagem inválida');
       }
 
-      // converte para Base64 caso seja uma URL temporária
-      let base64 = croppedImage;
-      if (!croppedImage.startsWith("data:image")) {
-        const response = await fetch(croppedImage);
-        const blob = await response.blob();
-        const reader = new FileReader();
-        base64 = await new Promise((resolve, reject) => {
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-        });
-      }
-
-      setImagemUrl(base64);
+      setImagePreview(croppedImage);
+      setImagemUrl(croppedImage);
       toast.success('Imagem selecionada com sucesso!');
     } catch (error) {
       console.error('Erro ao processar imagem:', error);
       toast.error('Erro ao processar a imagem. Tente novamente.');
       setImagePreview(null);
       setImagemUrl("");
-    } finally {
-      setLoading(false);
     }
   };
 

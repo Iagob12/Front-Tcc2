@@ -145,10 +145,19 @@ async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
     Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y)
   );
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
-      resolve(blob);
-    }, 'image/jpeg');
+      if (!blob) {
+        reject(new Error('Falha ao criar blob da imagem'));
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    }, 'image/jpeg', 0.95);
   });
 }
 

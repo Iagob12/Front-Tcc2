@@ -44,10 +44,22 @@ const AdicionarNoticia = () => {
   };
 
   const handleCropComplete = (croppedImage) => {
-    setImagePreview(croppedImage);
-    setShowCropModal(false);
-    setImageToCrop(null);
-    toast.success("Imagem ajustada com sucesso!");
+    try {
+      // Verifica se croppedImage é uma string base64 válida
+      if (!croppedImage || typeof croppedImage !== 'string' || !croppedImage.startsWith('data:image')) {
+        throw new Error('Imagem inválida');
+      }
+      
+      setImagePreview(croppedImage);
+      setShowCropModal(false);
+      setImageToCrop(null);
+      toast.success("Imagem ajustada com sucesso!");
+    } catch (error) {
+      console.error('Erro ao processar imagem:', error);
+      toast.error('Erro ao processar a imagem. Tente novamente.');
+      setShowCropModal(false);
+      setImageToCrop(null);
+    }
   };
 
   const handleCropCancel = () => {
@@ -99,55 +111,33 @@ const AdicionarNoticia = () => {
     setLoading(true);
 
     try {
-      // Converter a imagem cropada (que já está em blob URL) para base64
-      const response = await fetch(imagePreview);
-      const blob = await response.blob();
-      
-      const reader = new FileReader();
-      
-      reader.onloadend = async () => {
-        try {
-          const base64Image = reader.result;
+      // imagePreview já é base64, não precisa converter
+      const apiResponse = await apiPost('/blog/criar', {
+        tituloMateria: formData.tituloMateria,
+        informacao: formData.informacao,
+        urlNoticia: imagePreview,
+        bairro: "",
+        anonima: false
+      });
 
-          const apiResponse = await apiPost('/blog/criar', {
-            tituloMateria: formData.tituloMateria,
-            informacao: formData.informacao,
-            urlNoticia: base64Image,
-            bairro: "",
-            anonima: false
-          });
+      if (apiResponse.ok) {
+        toast.success("Notícia enviada com sucesso! Aguarde a aprovação de um administrador.");
 
-          if (apiResponse.ok) {
-            toast.success("Notícia enviada com sucesso! Aguarde a aprovação de um administrador.");
-
-            setTimeout(() => {
-              navigate('/blog');
-            }, 1500);
-          } else if (apiResponse.status === 401) {
-            toast.error("Você precisa estar logado para criar uma notícia.");
-          } else if (apiResponse.status === 403) {
-            toast.error("Você não tem permissão para enviar uma notícia.");
-          } else {
-            const error = await apiResponse.json();
-            toast.error(error.message || "Erro ao enviar notícia.");
-          }
-        } catch (error) {
-          console.error("Erro:", error);
-          toast.error("Erro ao enviar notícia. Tente novamente.");
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      reader.onerror = () => {
-        toast.error("Erro ao processar a imagem.");
-        setLoading(false);
-      };
-
-      reader.readAsDataURL(blob);
+        setTimeout(() => {
+          navigate('/blog');
+        }, 1500);
+      } else if (apiResponse.status === 401) {
+        toast.error("Você precisa estar logado para criar uma notícia.");
+      } else if (apiResponse.status === 403) {
+        toast.error("Você não tem permissão para enviar uma notícia.");
+      } else {
+        const error = await apiResponse.json();
+        toast.error(error.message || "Erro ao enviar notícia.");
+      }
     } catch (error) {
       console.error("Erro:", error);
-      toast.error("Erro ao processar a imagem. Tente novamente.");
+      toast.error("Erro ao enviar notícia. Tente novamente.");
+    } finally {
       setLoading(false);
     }
   };

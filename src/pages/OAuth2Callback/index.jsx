@@ -8,7 +8,7 @@ export default function OAuth2Callback() {
   useEffect(() => {
     console.log("🔄 OAuth2Callback - Processando login do Google");
     
-    // Extrair parâmetros da URL
+    // Tentar pegar tokens da URL (solução híbrida)
     const token = searchParams.get('token');
     const refreshToken = searchParams.get('refreshToken');
     const email = searchParams.get('email');
@@ -16,10 +16,10 @@ export default function OAuth2Callback() {
     const id = searchParams.get('id');
     const nome = searchParams.get('nome');
 
-    console.log('Dados recebidos:', { token: token?.substring(0, 20) + '...', email, role, id, nome });
-
     if (token && email) {
-      // Salvar no localStorage
+      // Tokens vieram na URL - salvar no localStorage
+      console.log('✅ Tokens recebidos na URL, salvando no localStorage');
+      
       localStorage.setItem('token', token);
       if (refreshToken) {
         localStorage.setItem('refreshToken', refreshToken);
@@ -35,19 +35,19 @@ export default function OAuth2Callback() {
       localStorage.setItem('userData', JSON.stringify(userData));
       localStorage.setItem('userLoggedIn', 'true');
       
-      console.log('✅ Dados salvos no localStorage');
-      
-      // Disparar evento de login
-      window.dispatchEvent(new Event('loginSuccess'));
-      
-      setTimeout(() => {
-        console.log("🏠 Redirecionando para home");
-        navigate('/', { replace: true });
-      }, 500);
+      console.log('✅ Dados salvos:', userData);
     } else {
-      console.error('❌ Token ou email não encontrados na URL');
-      navigate('/login', { replace: true });
+      // Tokens não vieram na URL - assumir que estão no cookie
+      console.log('ℹ️ Tokens não encontrados na URL, assumindo que estão no cookie');
     }
+    
+    // Disparar evento de login
+    window.dispatchEvent(new Event('loginSuccess'));
+    
+    setTimeout(() => {
+      console.log("🏠 Redirecionando para home");
+      navigate('/', { replace: true });
+    }, 500);
   }, [navigate, searchParams]);
 
   return (

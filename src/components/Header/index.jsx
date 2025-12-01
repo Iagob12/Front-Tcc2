@@ -111,9 +111,16 @@ const Header = () => {
         setUserData(null);
         setPerfilAberto(false);
 
-        // Limpa o cache do localStorage
+        // Limpa TODOS os dados do localStorage relacionados ao usuário
         localStorage.removeItem('userLoggedIn');
         localStorage.removeItem('userData');
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('isVoluntario');
+        
+        // Limpa todo o localStorage para garantir
+        localStorage.clear();
 
         navigate("/");
         window.location.reload();

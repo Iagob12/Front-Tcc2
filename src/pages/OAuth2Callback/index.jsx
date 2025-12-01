@@ -20,6 +20,9 @@ export default function OAuth2Callback() {
       // Tokens vieram na URL - salvar no localStorage
       console.log('✅ Tokens recebidos na URL, salvando no localStorage');
       
+      // Limpar TODOS os dados antigos antes de salvar novos
+      localStorage.clear();
+      
       localStorage.setItem('token', token);
       if (refreshToken) {
         localStorage.setItem('refreshToken', refreshToken);
@@ -29,9 +32,11 @@ export default function OAuth2Callback() {
         id: parseInt(id),
         email: email,
         role: role,
-        nome: decodeURIComponent(nome || email.split('@')[0])
+        nome: decodeURIComponent(nome || email.split('@')[0]),
+        imagemPerfil: ""
       };
       
+      localStorage.setItem('user', JSON.stringify(userData));
       localStorage.setItem('userData', JSON.stringify(userData));
       localStorage.setItem('userLoggedIn', 'true');
       

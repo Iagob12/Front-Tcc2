@@ -35,15 +35,23 @@ const EditarPerfil = () => {
   const carregarDados = async () => {
     try {
       setLoadingData(true);
-      const user = JSON.parse(localStorage.getItem('user'));
-
-      if (!user || !user.id) {
+      
+      // Primeiro, verificar autenticação atual
+      const authResponse = await apiGet('/auth/check');
+      if (!authResponse.ok) {
         toast.error("Você precisa estar logado.");
         navigate("/login");
         return;
       }
       
-      const responseUsuario = await apiGet(`/usuario/${user.id}`);
+      const authData = await authResponse.json();
+      const userId = authData.id;
+      
+      // Atualizar localStorage com dados frescos
+      localStorage.setItem('user', JSON.stringify(authData));
+      localStorage.setItem('userData', JSON.stringify(authData));
+      
+      const responseUsuario = await apiGet(`/usuario/${userId}`);
       
       if (responseUsuario.ok) {
         const usuario = await responseUsuario.json();

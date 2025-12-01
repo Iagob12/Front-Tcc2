@@ -91,13 +91,16 @@ export function ModalLoginOTP({ isOpen, onClose, onSuccess }) {
         const data = await response.json();
         setMessage('Login realizado com sucesso!');
         
+        // Limpar TODOS os dados antigos antes de salvar novos
+        localStorage.clear();
+        
         // Salvar dados do usuário no localStorage
         const userData = {
           id: data.id,
           nome: data.nome,
           email: data.email,
           role: data.role,
-          imagemPerfil: data.imagemPerfil
+          imagemPerfil: data.imagemPerfil || ""
         };
         
         localStorage.setItem('token', data.token);

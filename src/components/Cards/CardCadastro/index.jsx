@@ -65,13 +65,16 @@ const CardCadastro = ({ title, action }) => {
                 if (title === "Login") {
                     toast.success("Login realizado com sucesso!");
                     
+                    // Limpar TODOS os dados antigos do localStorage antes de salvar novos
+                    localStorage.clear();
+                    
                     // Salvar dados do usuário no localStorage
                     const userData = {
                         id: data.id,
                         nome: data.nome,
                         email: data.email,
                         role: data.role,
-                        imagemPerfil: data.imagemPerfil
+                        imagemPerfil: data.imagemPerfil || ""
                     };
                     
                     localStorage.setItem('token', data.token);

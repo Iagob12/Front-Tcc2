@@ -5,63 +5,26 @@ import Button from '../../components/Button';
 import main_img from '../../assets/TornarVoluntario/main.png'
 import "../../styles/TornarVoluntario/style.css"
 import { Link, useNavigate } from 'react-router-dom';
-import { apiGet } from '../../config/api';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function TornarVoluntario() {
     const navigate = useNavigate();
+    const { isVoluntario, user, loading: authLoading } = useAuth();
     const [loading, setLoading] = useState(true);
-    const [podeInscrever, setPodeInscrever] = useState(true);
 
     useEffect(() => {
-        const verificarStatus = async () => {
-            try {
-                const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-                const email = userData.email;
-                
-                if (!email) {
-                    setLoading(false);
-                    return;
-                }
-
-                // Buscar usuário
-                const responseUsuarios = await apiGet("/usuario/todos");
-                if (!responseUsuarios.ok) {
-                    setLoading(false);
-                    return;
-                }
-
-                const usuarios = await responseUsuarios.json();
-                const usuarioEncontrado = usuarios.find(u => u.email === email);
-                
-                if (!usuarioEncontrado) {
-                    setLoading(false);
-                    return;
-                }
-
-                const userId = usuarioEncontrado.id || usuarioEncontrado.idUsuario;
-
-                // Verificar se já é voluntário
-                const responseVoluntario = await apiGet(`/voluntario/usuario/${userId}`);
-                if (responseVoluntario.ok) {
-                    const voluntario = await responseVoluntario.json();
-                    
-                    if (voluntario && (voluntario.status === 'PENDENTE' || voluntario.status === 'APROVADO')) {
-                        setPodeInscrever(false);
-                        // Redirecionar após 2 segundos
-                        setTimeout(() => {
-                            navigate("/dashboard-voluntario");
-                        }, 2000);
-                    }
-                }
-            } catch (error) {
-                console.error("Erro ao verificar status:", error);
-            } finally {
-                setLoading(false);
+        // Aguardar o carregamento da autenticação
+        if (!authLoading) {
+            setLoading(false);
+            
+            // Se já é voluntário, redirecionar
+            if (isVoluntario) {
+                setTimeout(() => {
+                    navigate("/dashboard-voluntario");
+                }, 2000);
             }
-        };
-
-        verificarStatus();
-    }, [navigate]);
+        }
+    }, [authLoading, isVoluntario, navigate]);
 
     if (loading) {
         return (
@@ -82,7 +45,7 @@ export default function TornarVoluntario() {
         );
     }
 
-    if (!podeInscrever) {
+    if (isVoluntario) {
         return (
             <>
                 <Header />
@@ -97,7 +60,7 @@ export default function TornarVoluntario() {
                         textAlign: 'center'
                     }}>
                         <h2 style={{ fontSize: '2rem', marginBottom: '20px', color: '#b20000' }}>
-                            Você já é um voluntário!
+                            ✓ Você já é um voluntário!
                         </h2>
                         <p style={{ fontSize: '1.2rem', color: '#666', marginBottom: '20px' }}>
                             Redirecionando para o dashboard...

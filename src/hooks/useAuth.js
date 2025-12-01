@@ -23,6 +23,7 @@ export function useAuth() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [isVoluntario, setIsVoluntario] = useState(false);
 
   // Verifica se o usuário é ADMIN, agora pegando diretamente do localStorage
   const isAdmin = localStorage.getItem('userData') && JSON.parse(localStorage.getItem('userData')).role === 'ADMIN';
@@ -40,9 +41,15 @@ export function useAuth() {
         // Salva no localStorage
         localStorage.setItem('userLoggedIn', 'true');
         localStorage.setItem('userData', JSON.stringify(data));
+
+        // Verifica se é voluntário
+        if (data.id) {
+          checkVoluntarioStatus(data.id);
+        }
       } else {
         setIsAuthenticated(false);
         setUser(null);
+        setIsVoluntario(false);
         
         // Limpa o cache
         localStorage.removeItem('userLoggedIn');
@@ -52,12 +59,32 @@ export function useAuth() {
       console.error('Erro ao verificar autenticação:', error);
       setIsAuthenticated(false);
       setUser(null);
+      setIsVoluntario(false);
       
       // Limpa o cache
       localStorage.removeItem('userLoggedIn');
       localStorage.removeItem('userData');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkVoluntarioStatus = async (userId) => {
+    try {
+      const response = await apiGet(`/voluntario/usuario/${userId}`);
+      if (response.ok) {
+        const voluntarioData = await response.json();
+        const isActive = voluntarioData.status === 'ATIVO';
+        setIsVoluntario(isActive);
+        localStorage.setItem('isVoluntario', isActive.toString());
+      } else {
+        setIsVoluntario(false);
+        localStorage.setItem('isVoluntario', 'false');
+      }
+    } catch (error) {
+      console.error('Erro ao verificar status de voluntário:', error);
+      setIsVoluntario(false);
+      localStorage.setItem('isVoluntario', 'false');
     }
   };
 
@@ -77,11 +104,21 @@ export function useAuth() {
     };
   }, []);
 
+  // Carrega status de voluntário do localStorage na inicialização
+  useEffect(() => {
+    const cached = localStorage.getItem('isVoluntario');
+    if (cached) {
+      setIsVoluntario(cached === 'true');
+    }
+  }, []);
+
   return {
     isAuthenticated,
     isAdmin,
+    isVoluntario,
     user,
     loading,
-    checkAuth
+    checkAuth,
+    checkVoluntarioStatus
   };
 }

@@ -25,6 +25,8 @@ import PageGerenciarInscricoes from "./pages/GerenciarInscricoes";
 import BlogDetails from "./components/SistemaAprovacao/BlogDetails";
 import BlogDetalhes from "./components/PageBlog/BlogDetalhes";
 import VoluntarioDetails from "./components/SistemaAprovacao/VoluntarioDetails";
+import AdminRoute from "./components/ProtectedRoute/AdminRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Componente para scroll to top ao navegar
 function ScrollToTop() {
@@ -62,26 +64,26 @@ const App = () => {
         {/* Blog */}
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:id" element={<BlogDetalhes />} />
-        <Route path="/adicionar-noticia" element={<AdicionarNoticia />} />
-        <Route path="/adicionar-evento" element={<AdicionarEvento />} />
-        <Route path="/editar-evento/:id" element={<AdicionarEvento />} />
-        <Route path="/adicionar-atividade" element={<AdicionarAtividade />} />
-        <Route path="/atividades/editar/:id" element={<AdicionarAtividade />} />
+        <Route path="/adicionar-noticia" element={<ProtectedRoute><AdicionarNoticia /></ProtectedRoute>} />
+        
+        {/* Rotas Admin - Eventos e Atividades */}
+        <Route path="/adicionar-evento" element={<AdminRoute><AdicionarEvento /></AdminRoute>} />
+        <Route path="/editar-evento/:id" element={<AdminRoute><AdicionarEvento /></AdminRoute>} />
+        <Route path="/adicionar-atividade" element={<AdminRoute><AdicionarAtividade /></AdminRoute>} />
+        <Route path="/atividades/editar/:id" element={<AdminRoute><AdicionarAtividade /></AdminRoute>} />
 
         {/* Voluntariado */}
-        <Route path="/ser-voluntario" element={<SerVoluntario />} />
-        <Route path="/cancelar-voluntariado" element={<CancelarVoluntariado />} />
-        <Route path="/gerenciar-voluntarios" element={<GerenciarVoluntarios />} />
-        <Route path="/dashboard-voluntario" element={<DashboardVoluntario />} />
+        <Route path="/ser-voluntario" element={<ProtectedRoute><SerVoluntario /></ProtectedRoute>} />
+        <Route path="/cancelar-voluntariado" element={<ProtectedRoute><CancelarVoluntariado /></ProtectedRoute>} />
+        <Route path="/dashboard-voluntario" element={<ProtectedRoute><DashboardVoluntario /></ProtectedRoute>} />
         
-        {/* Sistema de aprovação */}
-        <Route path="/sistema-aprovacao" element={<PageSistemaAprovacao />} />
-        <Route path="/sistema-aprovacao/detalhes-blog/:id" element={<BlogDetails />} />
-        <Route path="/sistema-aprovacao/detalhes-voluntario/:id" element={<VoluntarioDetails />} />
-        
-        {/* Gerenciamento */}
-        <Route path="/gerenciar-inscricoes" element={<PageGerenciarInscricoes />} />
-        <Route path="/gerenciar-relatorios" element={<PageRelatorios />} />
+        {/* Rotas Admin - Gerenciamento */}
+        <Route path="/gerenciar-voluntarios" element={<AdminRoute><GerenciarVoluntarios /></AdminRoute>} />
+        <Route path="/sistema-aprovacao" element={<AdminRoute><PageSistemaAprovacao /></AdminRoute>} />
+        <Route path="/sistema-aprovacao/detalhes-blog/:id" element={<AdminRoute><BlogDetails /></AdminRoute>} />
+        <Route path="/sistema-aprovacao/detalhes-voluntario/:id" element={<AdminRoute><VoluntarioDetails /></AdminRoute>} />
+        <Route path="/gerenciar-inscricoes" element={<AdminRoute><PageGerenciarInscricoes /></AdminRoute>} />
+        <Route path="/gerenciar-relatorios" element={<AdminRoute><PageRelatorios /></AdminRoute>} />
       </Routes>
     </>
   );

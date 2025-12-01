@@ -7,6 +7,7 @@ import Button from "../../Button/";
 import Campanha01 from "../../../assets/Eventos/campanha-alimentacao.svg"
 import Campanha02 from "../../../assets/Eventos/campanha-sangue.svg"
 import Campanha03 from "../../../assets/Eventos/campanha-roupa.svg"
+import { Link } from "react-router-dom";
 
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -54,7 +55,9 @@ export default function SectionCampanhas() {
                         
                        
                     </Swiper>
-                    <Button text={"Saiba mais"} primary={true}/>
+                    <Link to="/sobre">
+                        <Button text={"Saiba mais"} primary={true}/>
+                    </Link>
                 </div>
             </div>
             

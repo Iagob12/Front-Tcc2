@@ -1,15 +1,15 @@
 .cardEventos-container{
     display: flex;
     width: 950px;
-    min-height: 350px;
     background-color: var(--color-white);
     border-radius: 20px;
     transition: 0.5s ;
+    overflow: hidden;
 }
 
 .cardEventos-container img {
     width: 350px;
-    height: 100%;
+    align-self: stretch;
     object-fit: cover;
     border-radius: 20px 0 0 20px;
     flex-shrink: 0;

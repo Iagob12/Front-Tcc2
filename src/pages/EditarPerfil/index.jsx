@@ -35,15 +35,6 @@ const EditarPerfil = () => {
     descricao: ""
   });
 
-  const fileToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result); 
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
-
   useEffect(() => {
     carregarDados();
   }, []);
@@ -144,22 +135,44 @@ const EditarPerfil = () => {
     setLoading(true);
 
     try {
-      let imagemPerfilBase64 = formData.fotoPerfil;
+      let imagemPerfilUrl = formData.fotoPerfil;
 
-      // Se o usuário enviou nova imagem
+      // Se o usuário enviou nova imagem, fazer upload primeiro
       if (imageFile) {
-        imagemPerfilBase64 = await fileToBase64(imageFile);
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', imageFile);
+
+        const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/upload/image`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: uploadFormData
+        });
+
+        if (uploadResponse.ok) {
+          const uploadResult = await uploadResponse.json();
+          imagemPerfilUrl = uploadResult.url;
+          console.log("✅ Imagem enviada com sucesso:", imagemPerfilUrl);
+        } else {
+          toast.error("Erro ao fazer upload da imagem");
+          setLoading(false);
+          return;
+        }
       }
 
       const dadosPerfil = {
         nome: formData.nome,
-        imagemPerfil: imagemPerfilBase64
+        imagemPerfil: imagemPerfilUrl
       };
 
+      // Adicionar campos de voluntário se aplicável
       if (isVoluntario) {
-        dadosPerfil.telefone = voluntarioFormData.telefone;
-        dadosPerfil.endereco = voluntarioFormData.endereco;
+        dadosPerfil.telefone = voluntarioFormData.telefone || "";
+        dadosPerfil.endereco = voluntarioFormData.endereco || "";
       }
+
+      console.log("📤 Enviando dados para o backend:", dadosPerfil);
 
       const responseUsuario = await apiPut("/usuario/editar-perfil", dadosPerfil);
 
@@ -168,9 +181,9 @@ const EditarPerfil = () => {
         const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 
         user.nome = formData.nome;
-        user.imagemPerfil = imagemPerfilBase64;
+        user.imagemPerfil = imagemPerfilUrl;
         userData.nome = formData.nome;
-        userData.imagemPerfil = imagemPerfilBase64;
+        userData.imagemPerfil = imagemPerfilUrl;
 
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('userData', JSON.stringify(userData));

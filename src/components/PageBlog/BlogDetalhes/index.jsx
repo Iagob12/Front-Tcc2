@@ -2,17 +2,18 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../../Header";
 import Footer from "../../Footer";
-import { apiGet, apiPost } from "../../../config/api";
+import { apiGet, apiPost, apiDelete } from "../../../config/api";
 import { useAuth } from "../../../hooks/useAuth";
 import { useToast } from '../../Toast/useToast';
 import ToastContainer from '../../Toast/ToastContainer';
-import { FaCalendarAlt, FaClock, FaArrowLeft, FaUser, FaPaperPlane } from "react-icons/fa";
+import ModalExclusao from "../../Modais/ModalExclusao";
+import { FaCalendarAlt, FaClock, FaArrowLeft, FaUser, FaPaperPlane, FaTrash } from "react-icons/fa";
 import "../../../styles/Blog/blog-detalhes/style.css";
 
 const BlogDetalhes = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, isAdmin } = useAuth();
   const toast = useToast();
 
   const [blog, setBlog] = useState(null);
@@ -20,6 +21,7 @@ const BlogDetalhes = () => {
   const [novoComentario, setNovoComentario] = useState("");
   const [loading, setLoading] = useState(true);
   const [enviandoComentario, setEnviandoComentario] = useState(false);
+  const [modalExclusaoOpen, setModalExclusaoOpen] = useState(false);
 
   useEffect(() => {
     carregarBlog();
@@ -129,6 +131,27 @@ const BlogDetalhes = () => {
     }
   };
 
+  const handleExcluirBlog = async () => {
+    try {
+      const response = await apiDelete(`/blog/deletar/${id}`);
+      
+      if (response.ok) {
+        toast.success("Blog excluído com sucesso!");
+        setTimeout(() => {
+          navigate("/blog");
+        }, 1500);
+      } else {
+        const error = await response.json();
+        toast.error(error.message || "Erro ao excluir blog.");
+      }
+    } catch (error) {
+      console.error("Erro ao excluir blog:", error);
+      toast.error("Erro ao excluir blog. Tente novamente.");
+    } finally {
+      setModalExclusaoOpen(false);
+    }
+  };
+
   if (loading) {
     return (
       <>
@@ -153,9 +176,16 @@ const BlogDetalhes = () => {
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
       <div className="blog-detalhes-container">
         <div className="blog-detalhes-content">
-          <button className="btn-voltar" onClick={() => navigate("/blog")}>
-            <FaArrowLeft /> Voltar
-          </button>
+          <div className="blog-detalhes-header-actions">
+            <button className="btn-voltar" onClick={() => navigate("/blog")}>
+              <FaArrowLeft /> Voltar
+            </button>
+            {isAdmin && (
+              <button className="btn-excluir-blog" onClick={() => setModalExclusaoOpen(true)}>
+                <FaTrash /> Excluir
+              </button>
+            )}
+          </div>
 
           <article className="blog-detalhes-article">
             <h1 className="blog-detalhes-titulo">{blog.tituloMateria}</h1>
@@ -264,6 +294,14 @@ const BlogDetalhes = () => {
           </section>
         </div>
       </div>
+
+      <ModalExclusao
+        isOpen={modalExclusaoOpen}
+        onClose={() => setModalExclusaoOpen(false)}
+        onConfirm={handleExcluirBlog}
+        mensagem="Tem certeza que deseja excluir este blog? Esta ação não pode ser desfeita."
+      />
+
       <Footer />
     </>
   );

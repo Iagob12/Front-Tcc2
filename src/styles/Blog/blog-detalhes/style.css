@@ -10,6 +10,13 @@
   padding: 0 40px;
 }
 
+.blog-detalhes-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
 .btn-voltar {
   display: flex;
   align-items: center;
@@ -20,7 +27,6 @@
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  margin-bottom: 30px;
   padding: 10px;
   transition: all 0.3s ease;
 }
@@ -28,6 +34,27 @@
 .btn-voltar:hover {
   color: var(--color-primary-dark);
   transform: translateX(-5px);
+}
+
+.btn-excluir-blog {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #dc3545;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 12px 24px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.btn-excluir-blog:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
 }
 
 .blog-detalhes-article {

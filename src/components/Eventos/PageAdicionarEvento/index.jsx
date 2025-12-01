@@ -60,6 +60,11 @@ const AdicionarEvento = () => {
     setLoading(true);
 
     try {
+      // Verifica se croppedImage é uma string válida
+      if (!croppedImage || typeof croppedImage !== 'string') {
+        throw new Error('Imagem inválida');
+      }
+
       // converte para Base64 caso seja uma URL temporária
       let base64 = croppedImage;
       if (!croppedImage.startsWith("data:image")) {

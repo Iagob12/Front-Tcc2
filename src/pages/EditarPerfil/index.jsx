@@ -66,18 +66,38 @@ const EditarPerfil = () => {
 
         try {
           const responseVoluntario = await apiGet(`/voluntario/usuario/${user.id}`);
+          console.log("📋 Response voluntário - Status HTTP:", responseVoluntario.status);
+          console.log("📋 Response voluntário - OK?:", responseVoluntario.ok);
+          
           if (responseVoluntario.ok) {
             const voluntario = await responseVoluntario.json();
-            if (voluntario.status === 'APROVADO') {
+            console.log("👤 Dados COMPLETOS do voluntário:", JSON.stringify(voluntario, null, 2));
+            console.log("✅ Status do voluntário:", voluntario.status);
+            console.log("✅ Tipo do status:", typeof voluntario.status);
+            
+            // Verificar se é APROVADO (case-insensitive)
+            const statusUpper = voluntario.status?.toUpperCase();
+            console.log("🔍 Status em maiúsculas:", statusUpper);
+            
+            if (statusUpper === 'APROVADO') {
+              console.log("🎯 Voluntário APROVADO - Mostrando campos extras");
               setIsVoluntario(true);
               setVoluntarioFormData({
                 telefone: voluntario.telefone || "",
                 endereco: voluntario.endereco || "",
                 descricao: voluntario.descricao || ""
               });
+            } else {
+              console.log("⚠️ Voluntário não aprovado. Status:", voluntario.status);
+              console.log("⚠️ Comparação: '" + statusUpper + "' === 'APROVADO' ?", statusUpper === 'APROVADO');
             }
+          } else {
+            console.log("❌ Usuário não é voluntário ou erro na requisição. Status:", responseVoluntario.status);
           }
-        } catch {}
+        } catch (error) {
+          console.error("❌ Erro ao verificar voluntário:", error);
+          console.error("❌ Stack trace:", error.stack);
+        }
       } else {
         toast.error("Erro ao carregar dados do perfil.");
       }
@@ -219,6 +239,9 @@ const EditarPerfil = () => {
     );
   }
 
+  console.log("🔍 Renderizando EditarPerfil - isVoluntario:", isVoluntario);
+  console.log("📝 voluntarioFormData:", voluntarioFormData);
+
   return (
     <>
       <Header />
@@ -227,7 +250,7 @@ const EditarPerfil = () => {
         <div className="content-editar-perfil">
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
             <h1>Editar Perfil</h1>
-            {isVoluntario && (
+            {isVoluntario ? (
               <span style={{
                 backgroundColor: '#B20000',
                 color: 'white',
@@ -237,6 +260,17 @@ const EditarPerfil = () => {
                 fontWeight: '600'
               }}>
                 ✓ Voluntário
+              </span>
+            ) : (
+              <span style={{
+                backgroundColor: '#999',
+                color: 'white',
+                padding: '6px 16px',
+                borderRadius: '20px',
+                fontSize: '14px',
+                fontWeight: '600'
+              }}>
+                DEBUG: Não é voluntário
               </span>
             )}
           </div>

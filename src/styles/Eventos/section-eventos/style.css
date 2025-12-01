@@ -33,14 +33,28 @@
 /* Mobile */
 @media (max-width: 768px) {
     .section-eventos {
-        padding: 40px 20px 60px;
-        gap: 24px;
+        padding: 40px 16px 60px;
+        gap: 20px;
+    }
+
+    .link-adicionar {
+        font-size: 1rem;
+        padding: 12px 20px;
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
     }
 }
 
 /* Mobile pequeno */
 @media (max-width: 480px) {
     .section-eventos {
-        padding: 32px 16px 50px;
+        padding: 32px 12px 50px;
+        gap: 16px;
+    }
+
+    .link-adicionar {
+        font-size: 0.9rem;
+        padding: 10px 16px;
     }
 }

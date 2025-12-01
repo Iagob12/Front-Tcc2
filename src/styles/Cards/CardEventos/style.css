@@ -69,50 +69,86 @@
 @media (max-width: 768px) {
     .cardEventos-container {
         width: 100%;
-        max-width: 600px;
+        max-width: 100%;
         flex-direction: column;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        margin: 0 auto;
     }
 
     .cardEventos-container img {
         width: 100%;
-        height: 250px;
-        border-radius: 20px 20px 0 0;
-    }
-
-    .cardEventos-info h2 {
-        font-size: 24px;
-        padding-top: 32px;
-        padding-bottom: 24px;
-    }
-
-    .dados-evento {
-        font-size: 18px;
-        gap: 16px;
-        padding: 0 20px 32px;
-    }
-
-    .cardEventos-info button {
-        padding: 12px 40px;
-    }
-}
-
-@media (max-width: 480px) {
-    .cardEventos-container img {
         height: 200px;
+        border-radius: 16px 16px 0 0;
+        object-fit: cover;
+    }
+
+    .cardEventos-info {
+        margin: 0;
+        padding: 24px 20px;
     }
 
     .cardEventos-info h2 {
         font-size: 20px;
+        padding: 0;
+        margin-bottom: 16px;
+        line-height: 1.3;
     }
 
     .dados-evento {
-        font-size: 16px;
-        gap: 14px;
-        padding: 0 16px 24px;
+        font-size: 14px;
+        gap: 12px;
+        padding: 0;
+        align-items: flex-start;
+    }
+
+    .dados-evento p {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        color: var(--color-grey-dark);
     }
 
     .cardEventos-info button {
-        padding: 10px 32px;
+        padding: 12px 32px;
+        margin-top: 8px;
+        width: 100%;
+    }
+
+    .opcoes-modificar-evento {
+        margin-top: 16px;
+        margin-bottom: 0;
+        padding-top: 16px;
+        border-top: 1px solid var(--color-grey-light);
+    }
+}
+
+@media (max-width: 480px) {
+    .cardEventos-container {
+        border-radius: 12px;
+    }
+
+    .cardEventos-container img {
+        height: 180px;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .cardEventos-info {
+        padding: 20px 16px;
+    }
+
+    .cardEventos-info h2 {
+        font-size: 18px;
+        margin-bottom: 14px;
+    }
+
+    .dados-evento {
         font-size: 13px;
+        gap: 10px;
+    }
+
+    .cardEventos-info button {
+        padding: 10px 24px;
+        font-size: 14px;
     }
 }

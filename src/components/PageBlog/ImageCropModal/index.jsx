@@ -3,7 +3,7 @@ import Cropper from 'react-easy-crop';
 import { X, Check, RotateCw, ZoomIn, ZoomOut } from 'lucide-react';
 import '../../../styles/Blog/image-crop-modal/style.css';
 
-const ImageCropModal = ({ image, onClose, onCropComplete }) => {
+const ImageCropModal = ({ image, onClose, onCropComplete, aspect = 16 / 9 }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
@@ -62,7 +62,7 @@ const ImageCropModal = ({ image, onClose, onCropComplete }) => {
             crop={crop}
             zoom={zoom}
             rotation={rotation}
-            aspect={16 / 9}
+            aspect={aspect}
             onCropChange={onCropChange}
             onZoomChange={onZoomChange}
             onCropComplete={onCropCompleteHandler}

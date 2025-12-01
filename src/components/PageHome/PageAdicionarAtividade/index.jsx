@@ -296,6 +296,7 @@ const AdicionarAtividade = () => {
           image={imageToCrop}
           onClose={handleCropCancel}
           onCropComplete={handleCropComplete}
+          aspect={1}
         />
       )}
     </>

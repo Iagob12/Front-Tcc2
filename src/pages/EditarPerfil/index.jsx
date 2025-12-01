@@ -21,18 +21,11 @@ const EditarPerfil = () => {
   const [imageToCrop, setImageToCrop] = useState(null);
   const [showCropModal, setShowCropModal] = useState(false);
   const [imageFile, setImageFile] = useState(null);
-  const [isVoluntario, setIsVoluntario] = useState(false);
-  const [voluntarioData, setVoluntarioData] = useState(null);
-  
   const [formData, setFormData] = useState({
     nome: "",
-    fotoPerfil: null
-  });
-  
-  const [voluntarioFormData, setVoluntarioFormData] = useState({
+    fotoPerfil: null,
     telefone: "",
-    endereco: "",
-    descricao: ""
+    endereco: ""
   });
 
   useEffect(() => {
@@ -57,46 +50,28 @@ const EditarPerfil = () => {
 
         setFormData({
           nome: usuario.nome || "",
-          fotoPerfil: usuario.imagemPerfil || null
+          fotoPerfil: usuario.imagemPerfil || null,
+          telefone: "",
+          endereco: ""
         });
 
         if (usuario.imagemPerfil) {
           setImagePreview(usuario.imagemPerfil);
         }
 
+        // Tentar carregar dados de voluntário (se existir)
         try {
           const responseVoluntario = await apiGet(`/voluntario/usuario/${user.id}`);
-          console.log("📋 Response voluntário - Status HTTP:", responseVoluntario.status);
-          console.log("📋 Response voluntário - OK?:", responseVoluntario.ok);
-          
           if (responseVoluntario.ok) {
             const voluntario = await responseVoluntario.json();
-            console.log("👤 Dados COMPLETOS do voluntário:", JSON.stringify(voluntario, null, 2));
-            console.log("✅ Status do voluntário:", voluntario.status);
-            console.log("✅ Tipo do status:", typeof voluntario.status);
-            
-            // Verificar se é APROVADO (case-insensitive)
-            const statusUpper = voluntario.status?.toUpperCase();
-            console.log("🔍 Status em maiúsculas:", statusUpper);
-            
-            if (statusUpper === 'APROVADO') {
-              console.log("🎯 Voluntário APROVADO - Mostrando campos extras");
-              setIsVoluntario(true);
-              setVoluntarioFormData({
-                telefone: voluntario.telefone || "",
-                endereco: voluntario.endereco || "",
-                descricao: voluntario.descricao || ""
-              });
-            } else {
-              console.log("⚠️ Voluntário não aprovado. Status:", voluntario.status);
-              console.log("⚠️ Comparação: '" + statusUpper + "' === 'APROVADO' ?", statusUpper === 'APROVADO');
-            }
-          } else {
-            console.log("❌ Usuário não é voluntário ou erro na requisição. Status:", responseVoluntario.status);
+            setFormData(prev => ({
+              ...prev,
+              telefone: voluntario.telefone || "",
+              endereco: voluntario.endereco || ""
+            }));
           }
         } catch (error) {
-          console.error("❌ Erro ao verificar voluntário:", error);
-          console.error("❌ Stack trace:", error.stack);
+          // Silenciosamente ignora se não for voluntário
         }
       } else {
         toast.error("Erro ao carregar dados do perfil.");
@@ -183,16 +158,10 @@ const EditarPerfil = () => {
 
       const dadosPerfil = {
         nome: formData.nome,
-        imagemPerfil: imagemPerfilUrl
+        imagemPerfil: imagemPerfilUrl,
+        telefone: formData.telefone || "",
+        endereco: formData.endereco || ""
       };
-
-      // Adicionar campos de voluntário se aplicável
-      if (isVoluntario) {
-        dadosPerfil.telefone = voluntarioFormData.telefone || "";
-        dadosPerfil.endereco = voluntarioFormData.endereco || "";
-      }
-
-      console.log("📤 Enviando dados para o backend:", dadosPerfil);
 
       const responseUsuario = await apiPut("/usuario/editar-perfil", dadosPerfil);
 
@@ -239,41 +208,13 @@ const EditarPerfil = () => {
     );
   }
 
-  console.log("🔍 Renderizando EditarPerfil - isVoluntario:", isVoluntario);
-  console.log("📝 voluntarioFormData:", voluntarioFormData);
-
   return (
     <>
       <Header />
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
       <div className="container-editar-perfil">
         <div className="content-editar-perfil">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
-            <h1>Editar Perfil</h1>
-            {isVoluntario ? (
-              <span style={{
-                backgroundColor: '#B20000',
-                color: 'white',
-                padding: '6px 16px',
-                borderRadius: '20px',
-                fontSize: '14px',
-                fontWeight: '600'
-              }}>
-                ✓ Voluntário
-              </span>
-            ) : (
-              <span style={{
-                backgroundColor: '#999',
-                color: 'white',
-                padding: '6px 16px',
-                borderRadius: '20px',
-                fontSize: '14px',
-                fontWeight: '600'
-              }}>
-                DEBUG: Não é voluntário
-              </span>
-            )}
-          </div>
+          <h1 style={{ marginBottom: '20px' }}>Editar Perfil</h1>
           
           <form className="form-editar-perfil" onSubmit={handleSubmit}>
 
@@ -334,61 +275,29 @@ const EditarPerfil = () => {
               />
             </div>
 
-            {/* CAMPOS DE VOLUNTÁRIO */}
-            {isVoluntario && (
-              <>
-                <div style={{
-                  backgroundColor: '#f8f9fa',
-                  padding: '20px',
-                  borderRadius: '10px',
-                  marginBottom: '20px',
-                  border: '2px solid #B20000'
-                }}>
-                  <h3 style={{ 
-                    color: '#B20000', 
-                    marginBottom: '15px',
-                    fontSize: '18px',
-                    fontWeight: '600'
-                  }}>
-                    📋 Informações de Voluntário
-                  </h3>
-                  
-                  <div className="form-field">
-                    <label className="label-editar-perfil" htmlFor="telefone">Telefone</label>
-                    <input
-                      type="text"
-                      id="telefone"
-                      value={voluntarioFormData.telefone}
-                      onChange={(e) => setVoluntarioFormData(prev => ({ ...prev, telefone: e.target.value }))}
-                      placeholder="(00) 00000-0000"
-                    />
-                  </div>
+            {/* TELEFONE */}
+            <div className="form-field">
+              <label className="label-editar-perfil" htmlFor="telefone">Telefone</label>
+              <input
+                type="text"
+                id="telefone"
+                value={formData.telefone}
+                onChange={(e) => setFormData(prev => ({ ...prev, telefone: e.target.value }))}
+                placeholder="(00) 00000-0000"
+              />
+            </div>
 
-                  <div className="form-field">
-                    <label className="label-editar-perfil" htmlFor="endereco">Endereço</label>
-                    <input
-                      type="text"
-                      id="endereco"
-                      value={voluntarioFormData.endereco}
-                      onChange={(e) => setVoluntarioFormData(prev => ({ ...prev, endereco: e.target.value }))}
-                      placeholder="Digite seu endereço completo"
-                    />
-                  </div>
-
-                  <div className="form-field">
-                    <label className="label-editar-perfil" htmlFor="descricao">Por que quer ser voluntário?</label>
-                    <textarea
-                      id="descricao"
-                      value={voluntarioFormData.descricao}
-                      onChange={(e) => setVoluntarioFormData(prev => ({ ...prev, descricao: e.target.value }))}
-                      placeholder="Descreva sua motivação para ser voluntário"
-                      rows="4"
-                      style={{ resize: 'vertical' }}
-                    />
-                  </div>
-                </div>
-              </>
-            )}
+            {/* ENDEREÇO */}
+            <div className="form-field">
+              <label className="label-editar-perfil" htmlFor="endereco">Endereço</label>
+              <input
+                type="text"
+                id="endereco"
+                value={formData.endereco}
+                onChange={(e) => setFormData(prev => ({ ...prev, endereco: e.target.value }))}
+                placeholder="Digite seu endereço completo"
+              />
+            </div>
 
             <div className="form-actions">
               <button type="button" className="btn-cancelar" onClick={() => navigate("/")}>

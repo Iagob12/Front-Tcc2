@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './style.css';
-import { Copy, Check } from 'lucide-react';
+import { Copy, Check, X } from 'lucide-react';
 import qrcode from "../../../assets/QRCode/qrcode_pix.png"
 
 const ModalEmDesenvolvimento = ({ isOpen, onClose }) => {
@@ -20,56 +20,64 @@ const ModalEmDesenvolvimento = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="modal-overlay-dev" onClick={onClose}>
-      <div className="modal-content-dev" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header-dev">
-          <h2 className="modal-title-dev">Sistema de Doações</h2>
+    <div className="modal-overlay-doacao" onClick={onClose}>
+      <div className="modal-content-doacao" onClick={(e) => e.stopPropagation()}>
+        
+        {/* Botão Fechar */}
+        <button className="modal-close-x" onClick={onClose} aria-label="Fechar">
+          <X size={24} />
+        </button>
+
+        {/* Header */}
+        <div className="modal-header-doacao">
+          <div className="header-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" opacity="0.9"/>
+              <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          <h2 className="modal-title-doacao">Doe via PIX</h2>
+          <p className="modal-subtitle-doacao">Sua contribuição faz a diferença</p>
         </div>
 
-        <div className="modal-body-dev">
-          <p className="modal-text-dev">
-            Faça uma doação agora mesmo, via Pix!
-          </p>
+        {/* Body */}
+        <div className="modal-body-doacao">
           
-          <div className="qrcode-container-dev">
-            <img className='qrcode' src={qrcode} alt="QRCode para Pix" />
-          </div>
-
-          <div className="pix-code-section">
-            <p className="pix-code-label">Ou copie o código PIX:</p>
-            <div className="pix-code-box">
-              <input 
-                type="text" 
-                value={pixCode} 
-                readOnly 
-                className="pix-code-input"
-              />
-              <button 
-                className={`copy-button ${copiado ? 'copied' : ''}`}
-                onClick={copiarPixCode}
-                title={copiado ? "Copiado!" : "Copiar código"}
-              >
-                {copiado ? (
-                  <>
-                    <Check size={18} />
-                    <span>Copiado!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy size={18} />
-                    <span>Copiar</span>
-                  </>
-                )}
-              </button>
+          {/* QR Code */}
+          <div className="qrcode-section">
+            <p className="qrcode-instruction">Escaneie o QR Code com seu app de pagamento</p>
+            <div className="qrcode-wrapper">
+              <img className='qrcode-img' src={qrcode} alt="QRCode PIX" />
             </div>
+
+            <button 
+              className={`btn-copy ${copiado ? 'copied' : ''}`}
+              onClick={copiarPixCode}
+            >
+              {copiado ? (
+                <>
+                  <Check size={20} />
+                  <span>Chave Copiada!</span>
+                </>
+              ) : (
+                <>
+                  <Copy size={20} />
+                  <span>Copiar Chave PIX</span>
+                </>
+              )}
+            </button>
           </div>
+
         </div>
 
-        <div className="modal-footer-dev">
-          <button className="modal-button-dev modal-close-btn" onClick={onClose}>
-            Fechar
-          </button>
+        {/* Footer */}
+        <div className="modal-footer-doacao">
+          <p className="footer-text">
+            <strong>Voluntários Pro Bem</strong> • Fazendo o bem, fazendo a diferença
+          </p>
         </div>
+
       </div>
     </div>
   );

@@ -1,30 +1,17 @@
 import { useState, useEffect } from 'react';
-import { isMobileDevice, isDesktop } from '../utils/deviceDetection';
+import { isMobileDevice } from '../utils/deviceDetection';
 
 export const useAppInstallPrompt = () => {
   const [showModal, setShowModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Verifica se já mostrou o modal nesta sessão
-    const hasShownModal = sessionStorage.getItem('appInstallPromptShown');
+    // Só mostra em dispositivos móveis
+    const mobile = isMobileDevice();
+    setIsMobile(mobile);
     
-    if (!hasShownModal) {
-      const mobile = isMobileDevice();
-      const desktop = isDesktop();
-      
-      setIsMobile(mobile);
-      
-      // Mostra o modal após 3 segundos na primeira visita
-      const timer = setTimeout(() => {
-        if (mobile || desktop) {
-          setShowModal(true);
-          sessionStorage.setItem('appInstallPromptShown', 'true');
-        }
-      }, 3000);
-
-      return () => clearTimeout(timer);
-    }
+    // Não mostra modal automaticamente - apenas o banner inferior aparece
+    // O modal só será mostrado se chamado manualmente via openModal()
   }, []);
 
   const closeModal = () => {

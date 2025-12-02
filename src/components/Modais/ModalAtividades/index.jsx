@@ -114,7 +114,7 @@ const ModalAtividades = ({ aula, data, horario, descricao, isOpen, onClose, posi
 
   if (!isOpen || !position) return null;
 
-  // Mantém posição e tamanho originais do card, mas permite altura dinâmica
+  // Mantém posição e tamanho fixos do card original
   const isMobile = window.innerWidth <= 768;
   
   const modalStyle = {
@@ -122,9 +122,7 @@ const ModalAtividades = ({ aula, data, horario, descricao, isOpen, onClose, posi
     top: `${position.top}px`,
     left: `${position.left}px`,
     width: `${position.width}px`,
-    minHeight: `${position.height}px`,
-    height: "auto",
-    maxHeight: "80vh",
+    height: `${position.height}px`,
     zIndex: 1501,
   };
 

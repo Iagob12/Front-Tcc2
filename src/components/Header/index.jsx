@@ -249,35 +249,6 @@ const Header = () => {
               <Link to="/como-ajudar" onClick={() => setMobileMenuAberto(false)}>Como Ajudar</Link>
             </li>
             
-            {/* Tarefas - apenas para usuários logados no mobile */}
-            {logado && (
-              <li className={`mobile-only ${location.pathname === '/tarefas' ? 'active' : ''}`}>
-                <Link to="/tarefas" onClick={() => setMobileMenuAberto(false)}>Minhas Tarefas</Link>
-              </li>
-            )}
-
-            {/* Editar Perfil - apenas para usuários logados no mobile */}
-            {logado && (
-              <li className={`mobile-only ${location.pathname === '/editar-perfil' ? 'active' : ''}`}>
-                <Link to="/editar-perfil" onClick={() => setMobileMenuAberto(false)}>Editar Perfil</Link>
-              </li>
-            )}
-
-            {/* Links de Admin - apenas no mobile */}
-            {logado && isAdmin && (
-              <>
-                <li className={`mobile-only ${location.pathname === '/gerenciar-relatorios' ? 'active' : ''}`}>
-                  <Link to="/gerenciar-relatorios" onClick={() => setMobileMenuAberto(false)}>Relatórios</Link>
-                </li>
-                <li className={`mobile-only ${location.pathname === '/sistema-aprovacao' ? 'active' : ''}`}>
-                  <Link to="/sistema-aprovacao" onClick={() => setMobileMenuAberto(false)}>Sistema de Aprovação</Link>
-                </li>
-                <li className={`mobile-only ${location.pathname === '/gerenciar-inscricoes' ? 'active' : ''}`}>
-                  <Link to="/gerenciar-inscricoes" onClick={() => setMobileMenuAberto(false)}>Gerenciar Inscrições</Link>
-                </li>
-              </>
-            )}
-            
             {/* Link do App - apenas visível no mobile */}
             <li className="menu-item-app-mobile">
               <a 

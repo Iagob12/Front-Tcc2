@@ -162,9 +162,9 @@ const Header = () => {
 
         {/* Navegação Desktop */}
         <nav className={`nav-header ${mobileMenuAberto ? 'mobile-open' : ''}`}>
-          {/* Header do menu mobile com perfil/cadastrar */}
-          <div className="mobile-menu-header">
-            {logado ? (
+          {/* Header do menu mobile - só mostra perfil quando logado */}
+          {logado && (
+            <div className="mobile-menu-header">
               <div className="mobile-user-info">
                 <div className="mobile-user-avatar">
                   {shouldShowImage(userData?.imagemPerfil) ? (
@@ -182,7 +182,7 @@ const Header = () => {
                     className="mobile-avatar-icon"
                     style={{ display: shouldShowImage(userData?.imagemPerfil) ? 'none' : 'flex' }}
                   >
-                    <User size={28} strokeWidth={2} />
+                    <User size={24} strokeWidth={2} />
                   </div>
                 </div>
                 <div className="mobile-user-details">
@@ -190,17 +190,8 @@ const Header = () => {
                   <p className="mobile-user-email">{userData?.email || ''}</p>
                 </div>
               </div>
-            ) : (
-              <div className="mobile-auth-buttons">
-                <Link to="/cadastrar-se" onClick={() => setMobileMenuAberto(false)}>
-                  <Button text="Cadastrar-se" primary={false} />
-                </Link>
-                <Link to="/login" onClick={() => setMobileMenuAberto(false)}>
-                  <Button text="Entrar" primary={true} />
-                </Link>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           <ul className="lista-header">
             <li className={location.pathname === '/eventos' ? 'active' : ''}>
@@ -264,6 +255,17 @@ const Header = () => {
 
           {/* Botões no menu mobile */}
           <div className="mobile-menu-buttons">
+            {!logado && (
+              <div className="mobile-auth-buttons">
+                <Link to="/login" onClick={() => setMobileMenuAberto(false)}>
+                  <Button text="Entrar" primary={false} />
+                </Link>
+                <Link to="/cadastrar-se" onClick={() => setMobileMenuAberto(false)}>
+                  <Button text="Cadastrar-se" primary={true} />
+                </Link>
+              </div>
+            )}
+            
             <Link to="/como-ajudar#doacao" onClick={() => setMobileMenuAberto(false)} style={{ width: '100%' }}>
               <Button text="Doe Agora" primary={true} />
             </Link>

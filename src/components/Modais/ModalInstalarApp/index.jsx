@@ -5,7 +5,7 @@ import './style.css';
 const ModalInstalarApp = ({ isOpen, onClose, isMobile = false }) => {
   if (!isOpen) return null;
 
-  const appDownloadLink = 'https://expo.dev/artifacts/eas/5RAxAaWjAWsKWxDCVDu6V9.apk';
+  const appDownloadLink = 'https://expo.dev/artifacts/eas/wq8RSobGBtLRY2ZxJZemQ8.apk';
 
   return (
     <div className="modal-app-overlay" onClick={onClose}>

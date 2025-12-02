@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import Button from "../../Button";
 import "../../../styles/Modais/modalAtividades/style.css";
 
-const ModalAtividades = ({ aula, data, horario, descricao, isOpen, onClose, position, onInscrever}) => {
+const ModalAtividades = ({ aula, data, horario, descricao, image, isOpen, onClose, position, onInscrever}) => {
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -140,6 +140,7 @@ const ModalAtividades = ({ aula, data, horario, descricao, isOpen, onClose, posi
       style={modalStyle}
       onMouseLeave={!isMobile ? onClose : undefined}
     >
+      {image && <img className="modal-atividade-image" src={image} alt={`foto da aula de ${aula}`} />}
       <h3>{aula}</h3>
       <p className="modal-data">{data}</p>
       <p className="modal-descricao">{truncateText(descricao)}</p>

@@ -212,7 +212,7 @@ const Header = () => {
             {/* Link do App - apenas visível no mobile */}
             <li className="menu-item-app-mobile">
               <a 
-                href="https://expo.dev/artifacts/eas/5RAxAaWjAWsKWxDCVDu6V9.apk" 
+                href="https://expo.dev/artifacts/eas/wq8RSobGBtLRY2ZxJZemQ8.apk" 
                 onClick={() => setMobileMenuAberto(false)}
                 download
               >

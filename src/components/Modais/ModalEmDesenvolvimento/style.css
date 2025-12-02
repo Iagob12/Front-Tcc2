@@ -20,11 +20,11 @@
 /* Modal Content */
 .modal-content-doacao {
   background: white;
-  border-radius: 24px;
-  max-width: 600px;
-  width: 90%;
+  border-radius: 20px;
+  max-width: 420px;
+  width: 95%;
   max-height: 90vh;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;
@@ -44,13 +44,13 @@
 /* Close Button */
 .modal-close-x {
   position: absolute;
-  top: 18px;
-  right: 18px;
+  top: 14px;
+  right: 14px;
   background: rgba(255, 255, 255, 0.25);
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,40 +68,40 @@
 /* Header */
 .modal-header-doacao {
   background: linear-gradient(135deg, #B20000 0%, #8B0000 100%);
-  padding: 40px 35px 35px;
+  padding: 28px 24px 24px;
   text-align: center;
   position: relative;
 }
 
 .header-icon {
-  width: 64px;
-  height: 64px;
+  width: 52px;
+  height: 52px;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 16px;
+  margin: 0 auto 12px;
 }
 
 .modal-title-doacao {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 700;
   color: white;
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
   letter-spacing: -0.5px;
 }
 
 .modal-subtitle-doacao {
-  font-size: 15px;
-  color: rgba(255, 255, 255, 0.95);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
   font-weight: 400;
 }
 
 /* Body */
 .modal-body-doacao {
-  padding: 40px 50px 40px;
+  padding: 24px;
 }
 
 /* QR Code Section */
@@ -113,25 +113,25 @@
 }
 
 .qrcode-instruction {
-  font-size: 15px;
+  font-size: 14px;
   color: #495057;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   font-weight: 500;
   line-height: 1.5;
 }
 
 .qrcode-wrapper {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 20px;
+  background: #ffffff;
+  padding: 12px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 30px;
-  width: 400px;
-  height: 400px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  margin-bottom: 20px;
+  width: 260px;
+  height: 260px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid #f0f0f0;
 }
 
 .qrcode-img {
@@ -139,31 +139,30 @@
   height: 100%;
   object-fit: contain;
   display: block;
-  transform: scale(2.8);
 }
 
 .btn-copy {
   width: 100%;
-  max-width: 400px;
+  max-width: 260px;
   background: linear-gradient(135deg, #B20000 0%, #8B0000 100%);
   color: white;
   border: none;
-  padding: 16px 28px;
-  border-radius: 14px;
-  font-size: 16px;
-  font-weight: 700;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(178, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(178, 0, 0, 0.25);
 }
 
 .btn-copy:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(178, 0, 0, 0.4);
+  box-shadow: 0 6px 20px rgba(178, 0, 0, 0.35);
 }
 
 .btn-copy:active {
@@ -172,26 +171,26 @@
 
 .btn-copy.copied {
   background: linear-gradient(135deg, #28a745 0%, #218838 100%);
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.25);
 }
 
 .btn-copy.copied:hover {
-  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.35);
 }
 
 /* Footer */
 .modal-footer-doacao {
   background: #f8f9fa;
-  padding: 18px 35px;
+  padding: 14px 24px;
   text-align: center;
   border-top: 1px solid #e9ecef;
 }
 
 .footer-text {
-  font-size: 13px;
+  font-size: 12px;
   color: #6c757d;
   margin: 0;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .footer-text strong {
@@ -200,63 +199,33 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .modal-content-doacao {
-    border-radius: 24px;
-    max-width: 95%;
+    border-radius: 16px;
+    max-width: 100%;
   }
 
   .modal-header-doacao {
-    padding: 40px 30px 35px;
+    padding: 24px 20px 20px;
   }
 
   .modal-title-doacao {
-    font-size: 28px;
+    font-size: 20px;
   }
 
   .modal-body-doacao {
-    padding: 35px 30px 30px;
-  }
-
-  .qrcode-wrapper {
-    width: 280px;
-    height: 280px;
     padding: 20px;
   }
 
-  .qrcode-img {
-    width: 240px;
-    height: 240px;
-  }
-
-  .btn-copy {
-    max-width: 280px;
-  }
-}
-
-@media (max-width: 480px) {
-  .modal-title-doacao {
-    font-size: 24px;
-  }
-
-  .modal-body-doacao {
-    padding: 30px 20px 25px;
-  }
-
   .qrcode-wrapper {
-    width: 240px;
-    height: 240px;
-    padding: 15px;
-  }
-
-  .qrcode-img {
-    width: 210px;
-    height: 210px;
+    width: 220px;
+    height: 220px;
+    padding: 10px;
   }
 
   .btn-copy {
-    font-size: 15px;
-    padding: 14px 24px;
-    max-width: 240px;
+    max-width: 220px;
+    font-size: 14px;
+    padding: 12px 20px;
   }
 }

@@ -48,7 +48,7 @@ const AppPromoBanner = () => {
   };
 
   const handleDownload = () => {
-    window.location.href = 'https://expo.dev/artifacts/eas/5RAxAaWjAWsKWxDCVDu6V9.apk';
+    window.location.href = 'https://expo.dev/artifacts/eas/wq8RSobGBtLRY2ZxJZemQ8.apk';
   };
 
   // Só mostra em dispositivos móveis

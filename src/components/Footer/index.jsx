@@ -17,7 +17,7 @@ const Footer = () => {
   const modalTermos = UseModal();
   const modalPrivacidade = UseModal();
   const isMobile = isMobileDevice();
-  const appDownloadLink = 'https://expo.dev/artifacts/eas/5RAxAaWjAWsKWxDCVDu6V9.apk';
+  const appDownloadLink = 'https://expo.dev/artifacts/eas/wq8RSobGBtLRY2ZxJZemQ8.apk';
 
   const scrollToTop = () => {
     window.scrollTo({

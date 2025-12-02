@@ -162,37 +162,6 @@ const Header = () => {
 
         {/* Navegação Desktop */}
         <nav className={`nav-header ${mobileMenuAberto ? 'mobile-open' : ''}`}>
-          {/* Header do menu mobile - só mostra perfil quando logado */}
-          {logado && (
-            <div className="mobile-menu-header">
-              <div className="mobile-user-info">
-                <div className="mobile-user-avatar">
-                  {shouldShowImage(userData?.imagemPerfil) ? (
-                    <img 
-                      src={userData.imagemPerfil} 
-                      alt="Foto de perfil" 
-                      className="mobile-avatar-image"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextSibling.style.display = 'flex';
-                      }}
-                    />
-                  ) : null}
-                  <div 
-                    className="mobile-avatar-icon"
-                    style={{ display: shouldShowImage(userData?.imagemPerfil) ? 'none' : 'flex' }}
-                  >
-                    <User size={24} strokeWidth={2} />
-                  </div>
-                </div>
-                <div className="mobile-user-details">
-                  <h3 className="mobile-user-name">{userData?.nome || 'Usuário'}</h3>
-                  <p className="mobile-user-email">{userData?.email || ''}</p>
-                </div>
-              </div>
-            </div>
-          )}
-
           <ul className="lista-header">
             <li className={location.pathname === '/eventos' ? 'active' : ''}>
               <Link to="/eventos" onClick={() => setMobileMenuAberto(false)}>Eventos</Link>
@@ -255,22 +224,11 @@ const Header = () => {
 
           {/* Botões no menu mobile */}
           <div className="mobile-menu-buttons">
-            {!logado && (
-              <div className="mobile-auth-buttons">
-                <Link to="/login" onClick={() => setMobileMenuAberto(false)}>
-                  <Button text="Entrar" primary={false} />
-                </Link>
-                <Link to="/cadastrar-se" onClick={() => setMobileMenuAberto(false)}>
-                  <Button text="Cadastrar-se" primary={true} />
-                </Link>
-              </div>
-            )}
-            
-            <Link to="/como-ajudar#doacao" onClick={() => setMobileMenuAberto(false)} style={{ width: '100%' }}>
+            <Link to="/como-ajudar#doacao" onClick={() => setMobileMenuAberto(false)}>
               <Button text="Doe Agora" primary={true} />
             </Link>
             
-            {logado && (
+            {logado ? (
               <button 
                 className="mobile-logout-btn"
                 onClick={() => {
@@ -280,6 +238,10 @@ const Header = () => {
               >
                 Sair da conta
               </button>
+            ) : (
+              <Link to="/cadastrar-se" onClick={() => setMobileMenuAberto(false)}>
+                <Button text="Cadastrar-se" primary={false} />
+              </Link>
             )}
           </div>
         </nav>

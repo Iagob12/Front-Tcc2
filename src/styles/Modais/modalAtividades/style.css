@@ -12,17 +12,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   gap: 12px;
-}
-
-/* Imagem da atividade */
-.modal-atividade-container-positioned .modal-atividade-image {
-  width: 160px;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin: 0 auto;
 }
 
 /* Título da atividade */
@@ -86,12 +76,6 @@
   .modal-atividade-container-positioned {
     padding: 14px;
     gap: 8px;
-  }
-  
-  .modal-atividade-container-positioned .modal-atividade-image {
-    width: 110px;
-    height: 110px;
-    border-radius: 10px;
   }
   
   .modal-atividade-container-positioned h3 {

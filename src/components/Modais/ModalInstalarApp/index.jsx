@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Smartphone, Monitor } from 'lucide-react';
 import './style.css';
+import qrcodeApp from '../../../assets/QRCode/qrcode_app.png';
 
 const ModalInstalarApp = ({ isOpen, onClose, isMobile = false }) => {
   if (!isOpen) return null;
@@ -44,7 +45,7 @@ const ModalInstalarApp = ({ isOpen, onClose, isMobile = false }) => {
               </p>
               <div className="qrcode-container">
                 <img 
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(appDownloadLink)}`}
+                  src={qrcodeApp}
                   alt="QR Code para download do app"
                   className="qrcode-image"
                 />

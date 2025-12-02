@@ -157,7 +157,6 @@ const AtividadeSection = () => {
           data={atividadeSelecionada.data}
           descricao={atividadeSelecionada.descricao}
           horario={atividadeSelecionada.horario}
-          image={atividadeSelecionada.image}
           position={atividadeSelecionada.position}
           onInscrever={handleInscrever}
         />

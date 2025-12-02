@@ -42,9 +42,11 @@ export default function SectionAulas() {
         return <p style={{height: "200px", display: "flex", justifyContent: "center", alignItems: "center", fontSize: "1.5rem"}}>Você ainda não está inscrito em nenhuma aula.</p>;
     }
 
+    const hasScroll = aulas.length > 4;
+
     return (
         <div className="lista-aulas-container">
-            <section className="lista-aulas">
+            <section className={`lista-aulas ${hasScroll ? 'has-scroll' : ''}`}>
                 {aulas.map((curso) => (
                     <CardAula
                         key={curso.idInscricao}
@@ -59,13 +61,11 @@ export default function SectionAulas() {
                     />
                 ))}
             </section>
-            {aulas.length > 1 && (
-                <div className="scroll-indicator">
-                    <FaChevronLeft />
-                    <span>Arraste para ver mais</span>
-                    <FaChevronRight />
-                </div>
-            )}
+            <div className={`scroll-indicator ${hasScroll ? 'visible' : ''}`}>
+                <FaChevronLeft />
+                <span>Arraste para ver mais</span>
+                <FaChevronRight />
+            </div>
         </div>
     );
 }

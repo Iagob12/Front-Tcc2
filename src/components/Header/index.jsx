@@ -162,6 +162,46 @@ const Header = () => {
 
         {/* Navegação Desktop */}
         <nav className={`nav-header ${mobileMenuAberto ? 'mobile-open' : ''}`}>
+          {/* Header do menu mobile com perfil/cadastrar */}
+          <div className="mobile-menu-header">
+            {logado ? (
+              <div className="mobile-user-info">
+                <div className="mobile-user-avatar">
+                  {shouldShowImage(userData?.imagemPerfil) ? (
+                    <img 
+                      src={userData.imagemPerfil} 
+                      alt="Foto de perfil" 
+                      className="mobile-avatar-image"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div 
+                    className="mobile-avatar-icon"
+                    style={{ display: shouldShowImage(userData?.imagemPerfil) ? 'none' : 'flex' }}
+                  >
+                    <User size={28} strokeWidth={2} />
+                  </div>
+                </div>
+                <div className="mobile-user-details">
+                  <h3 className="mobile-user-name">{userData?.nome || 'Usuário'}</h3>
+                  <p className="mobile-user-email">{userData?.email || ''}</p>
+                </div>
+              </div>
+            ) : (
+              <div className="mobile-auth-buttons">
+                <Link to="/cadastrar-se" onClick={() => setMobileMenuAberto(false)}>
+                  <Button text="Cadastrar-se" primary={false} />
+                </Link>
+                <Link to="/login" onClick={() => setMobileMenuAberto(false)}>
+                  <Button text="Entrar" primary={true} />
+                </Link>
+              </div>
+            )}
+          </div>
+
           <ul className="lista-header">
             <li className={location.pathname === '/eventos' ? 'active' : ''}>
               <Link to="/eventos" onClick={() => setMobileMenuAberto(false)}>Eventos</Link>
@@ -209,6 +249,35 @@ const Header = () => {
               <Link to="/como-ajudar" onClick={() => setMobileMenuAberto(false)}>Como Ajudar</Link>
             </li>
             
+            {/* Tarefas - apenas para usuários logados no mobile */}
+            {logado && (
+              <li className={`mobile-only ${location.pathname === '/tarefas' ? 'active' : ''}`}>
+                <Link to="/tarefas" onClick={() => setMobileMenuAberto(false)}>Minhas Tarefas</Link>
+              </li>
+            )}
+
+            {/* Editar Perfil - apenas para usuários logados no mobile */}
+            {logado && (
+              <li className={`mobile-only ${location.pathname === '/editar-perfil' ? 'active' : ''}`}>
+                <Link to="/editar-perfil" onClick={() => setMobileMenuAberto(false)}>Editar Perfil</Link>
+              </li>
+            )}
+
+            {/* Links de Admin - apenas no mobile */}
+            {logado && isAdmin && (
+              <>
+                <li className={`mobile-only ${location.pathname === '/gerenciar-relatorios' ? 'active' : ''}`}>
+                  <Link to="/gerenciar-relatorios" onClick={() => setMobileMenuAberto(false)}>Relatórios</Link>
+                </li>
+                <li className={`mobile-only ${location.pathname === '/sistema-aprovacao' ? 'active' : ''}`}>
+                  <Link to="/sistema-aprovacao" onClick={() => setMobileMenuAberto(false)}>Sistema de Aprovação</Link>
+                </li>
+                <li className={`mobile-only ${location.pathname === '/gerenciar-inscricoes' ? 'active' : ''}`}>
+                  <Link to="/gerenciar-inscricoes" onClick={() => setMobileMenuAberto(false)}>Gerenciar Inscrições</Link>
+                </li>
+              </>
+            )}
+            
             {/* Link do App - apenas visível no mobile */}
             <li className="menu-item-app-mobile">
               <a 
@@ -224,40 +293,20 @@ const Header = () => {
 
           {/* Botões no menu mobile */}
           <div className="mobile-menu-buttons">
-            <Link to="/como-ajudar#doacao" onClick={() => setMobileMenuAberto(false)}>
+            <Link to="/como-ajudar#doacao" onClick={() => setMobileMenuAberto(false)} style={{ width: '100%' }}>
               <Button text="Doe Agora" primary={true} />
             </Link>
             
-            {logado ? (
+            {logado && (
               <button 
-                className="profile-icon-btn" 
+                className="mobile-logout-btn"
                 onClick={() => {
-                  setPerfilAberto(!perfilAberto);
+                  handleLogout();
                   setMobileMenuAberto(false);
                 }}
-                aria-label="Abrir perfil"
               >
-                {shouldShowImage(userData?.imagemPerfil) ? (
-                  <img 
-                    src={userData.imagemPerfil} 
-                    alt="Foto de perfil" 
-                    className="profile-icon-image"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'block';
-                    }}
-                  />
-                ) : null}
-                <User 
-                  size={24} 
-                  strokeWidth={2} 
-                  style={{ display: shouldShowImage(userData?.imagemPerfil) ? 'none' : 'block' }}
-                />
+                Sair da conta
               </button>
-            ) : (
-              <Link to="/cadastrar-se" onClick={() => setMobileMenuAberto(false)}>
-                <Button text="Cadastrar-se →" primary={false} />
-              </Link>
             )}
           </div>
         </nav>

@@ -709,30 +709,29 @@ a.drop-item:hover{
     .mobile-menu-header {
         display: flex;
         flex-direction: column;
-        padding: 20px 24px;
-        background: linear-gradient(135deg, var(--color-secondary) 0%, #8b0000 100%);
-        margin-bottom: 0;
+        padding: 24px 20px;
+        background: var(--color-white);
+        border-bottom: 1px solid var(--color-grey-light);
     }
 
     /* Info do usuário logado no mobile */
     .mobile-user-info {
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 12px;
     }
 
     .mobile-user-avatar {
-        width: 56px;
-        height: 56px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: var(--color-secondary);
         display: flex;
         align-items: center;
         justify-content: center;
         color: var(--color-white);
         flex-shrink: 0;
         overflow: hidden;
-        border: 2px solid rgba(255, 255, 255, 0.3);
     }
 
     .mobile-avatar-image {
@@ -757,18 +756,18 @@ a.drop-item:hover{
     }
 
     .mobile-user-name {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 600;
-        color: var(--color-white);
-        margin: 0 0 4px 0;
+        color: var(--color-black);
+        margin: 0 0 2px 0;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
 
     .mobile-user-email {
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.8);
+        font-size: 12px;
+        color: var(--color-grey);
         margin: 0;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -778,7 +777,7 @@ a.drop-item:hover{
     /* Botões de auth no mobile (não logado) */
     .mobile-auth-buttons {
         display: flex;
-        gap: 12px;
+        gap: 10px;
         width: 100%;
     }
 
@@ -788,26 +787,28 @@ a.drop-item:hover{
 
     .mobile-auth-buttons button {
         width: 100%;
-        font-size: 14px;
+        font-size: 13px;
+        padding: 10px 12px;
     }
 
     /* Botão de logout no mobile */
     .mobile-logout-btn {
         width: 100%;
-        padding: 14px 20px;
+        padding: 12px 16px;
         background: transparent;
-        border: 2px solid var(--color-secondary);
+        border: 1px solid var(--color-grey-light);
         border-radius: 8px;
-        color: var(--color-secondary);
-        font-size: 15px;
-        font-weight: 600;
+        color: var(--color-grey-dark);
+        font-size: 14px;
+        font-weight: 500;
         cursor: pointer;
         transition: all 0.3s ease;
     }
 
     .mobile-logout-btn:hover {
-        background-color: var(--color-secondary);
-        color: var(--color-white);
+        background-color: rgba(178, 0, 0, 0.1);
+        border-color: var(--color-secondary);
+        color: var(--color-secondary);
     }
 
     /* Item do App no menu mobile - visível */

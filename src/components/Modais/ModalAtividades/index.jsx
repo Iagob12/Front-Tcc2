@@ -114,17 +114,36 @@ const ModalAtividades = ({ aula, data, horario, descricao, isOpen, onClose, posi
 
   if (!isOpen || !position) return null;
 
-  // Mantém posição e tamanho fixos do card original
   const isMobile = window.innerWidth <= 768;
   
-  const modalStyle = {
-    position: "fixed",
-    top: `${position.top}px`,
-    left: `${position.left}px`,
-    width: `${position.width}px`,
-    height: `${position.height}px`,
-    zIndex: 1501,
-  };
+  // No desktop, expande o modal; no mobile, mantém o tamanho do card
+  let modalStyle;
+  
+  if (isMobile) {
+    modalStyle = {
+      position: "fixed",
+      top: `${position.top}px`,
+      left: `${position.left}px`,
+      width: `${position.width}px`,
+      height: `${position.height}px`,
+      zIndex: 1501,
+    };
+  } else {
+    // Desktop: modal maior, centralizado sobre o card
+    const expandedWidth = 220;
+    const expandedHeight = 280;
+    const centerX = position.left + (position.width / 2);
+    const centerY = position.top + (position.height / 2);
+    
+    modalStyle = {
+      position: "fixed",
+      top: `${Math.max(10, centerY - expandedHeight / 2)}px`,
+      left: `${Math.max(10, centerX - expandedWidth / 2)}px`,
+      width: `${expandedWidth}px`,
+      height: `${expandedHeight}px`,
+      zIndex: 1501,
+    };
+  }
 
   // Função para truncar texto longo
   const truncateText = (text, maxLength = 150) => {

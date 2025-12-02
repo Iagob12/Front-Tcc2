@@ -118,7 +118,8 @@ const AtividadeSection = () => {
               ref={swiperRef}
               modules={[Pagination]}
               slidesPerView="auto"
-              spaceBetween={20}
+              spaceBetween={16}
+              centeredSlides={false}
               pagination={{ clickable: true }}
               allowTouchMove={true}
               grabCursor={true}
